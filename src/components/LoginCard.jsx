@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import logo from "../../public/logo.png";
+// import logo from "../../public/logo.png";
+import logo from "../assets/logo3.png"
 
 export default function LoginCard() {
   const navigate = useNavigate();
@@ -51,18 +52,18 @@ export default function LoginCard() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#e62424]">
-      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="bg-[#b61825] shadow-lg rounded-xl p-8 w-full max-w-md">
         {/* Centered Logo */}
         <div className="flex justify-center mb-4">
           <img
             src={logo}
             alt="logo"
-            className="w-20 h-20 object-contain drop-shadow-md"
+            className="w-30 h-30 object-contain drop-shadow-md"
           />
         </div>
 
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
+        <h2 className="text-3xl font-bold text-center mb-6 text-white">
           Login
         </h2>
 

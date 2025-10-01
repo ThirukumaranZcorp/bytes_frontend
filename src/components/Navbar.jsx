@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/logo1.png"
+import logo from "../assets/logo2.jpg"
 export default function Navbar() {
   return (
     <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-50 ">
@@ -43,7 +43,7 @@ export default function Navbar() {
           <div className="hidden md:flex">
             <a
               href="/signup"
-              className="bg-[#e62424] text-white px-4 py-2 rounded-xl shadow hover:bg-black transition duration-200"
+              className="bg-[#b61825] text-white px-4 py-2 rounded-xl shadow hover:bg-black transition duration-200"
             >
               SignUp
             </a>

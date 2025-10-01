@@ -1,6 +1,7 @@
 import { useState } from "react";
-import logo from "../../public/logo.png";
-
+// import logo from "../../public/logo.png";
+// import logo from "../assets/logo3.png"
+import logo from "../assets/logo3.png"
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -52,9 +53,9 @@ export default function SignUp() {
       const data = await response.json();
       console.log("Signup success:", data);
 
-      alert("Account created successfully!");
+      // alert("Account created successfully!");
       // Optionally redirect to login page
-      window.location.href = "/";
+      window.location.href = "/payment_details";
     } catch (error) {
       console.error("Network error:", error);
       alert("Something went wrong, please try again later.");
@@ -63,26 +64,26 @@ export default function SignUp() {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#e62424]">
-      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="bg-[#b61825] shadow-lg rounded-xl p-8 w-full max-w-md">
 
         <div className="flex justify-center mb-4">
           <img
             src={logo}
             alt="logo"
-            className="w-20 h-20 object-contain drop-shadow-md"
+            className="w-30 h-30 object-contain drop-shadow-md"
           />
         </div>
 
 
-        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+        <h2 className="text-2xl font-bold text-center mb-6 text-white">
           Create an Account
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name */}
           <div>
-            <label className="block text-gray-700 font-semibold mb-1">
+            <label className="block text-white   font-semibold mb-1">
               Name
             </label>
             <input
@@ -91,14 +92,14 @@ export default function SignUp() {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your name"
             />
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-gray-700 font-semibold mb-1">
+            <label className="block text-white font-semibold mb-1">
               Email
             </label>
             <input
@@ -107,14 +108,14 @@ export default function SignUp() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-white text-whiteborder border-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your email"
             />
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-gray-700 font-semibold mb-1">
+            <label className="block text-white font-semibold mb-1">
               Password
             </label>
             <input
@@ -123,14 +124,14 @@ export default function SignUp() {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-white border border-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your password"
             />
           </div>
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-gray-700 font-semibold mb-1">
+            <label className="block text-white font-semibold mb-1">
               Confirm Password
             </label>
             <input
@@ -139,7 +140,7 @@ export default function SignUp() {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-white border border-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Confirm password"
             />
           </div>
@@ -153,7 +154,7 @@ export default function SignUp() {
           </button>
 
           {/* Redirect to Login */}
-          <p className="text-sm text-gray-600 text-center mt-4">
+          <p className="text-sm text-white text-center mt-4">
             Already have an account?{" "}
             <a href="/" className="text-blue-600 hover:underline font-semibold">
               Login

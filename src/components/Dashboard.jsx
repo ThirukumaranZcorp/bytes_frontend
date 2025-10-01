@@ -73,7 +73,7 @@ export default function Dashboard() {
   return (
     <>
       <Navbar />
-      <div className="bg-[#e62424] pt-40">
+      <div className="bg-[#b61825] pt-40">
         
         {/* <h1 className="text-3xl font-bold text-center  pt-35 m-6">Investment Dashboard</h1> */}
 
