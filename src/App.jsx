@@ -55,15 +55,38 @@
 // }
 
 
+// import React from "react";
+// import ReactDOM from "react-dom/client";
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import LoginCard from "./components/LoginCard";
+// import SignUp from "./components/SignUp";
+// import Dashboard from "./components/Dashboard";
+// import PaymentForm from "./components/PaymentForm";
+// import "./index.css"; // Tailwind CSS
+// import SignUpWithDetails from "./components/SignUpWithDetails"
+
+// function App() {
+//   return (
+//     <BrowserRouter>
+//       <Routes>
+//         <Route path="/" element={<LoginCard />} />
+//         <Route path="/signup" element={<SignUpWithDetails />} />
+//         <Route path="/dashboard" element={<Dashboard />} />
+//         <Route path="/payment_details" element={<PaymentForm />} />
+//       </Routes>
+//     </BrowserRouter>
+//   );
+// }
+
+// export default App;
+
 import React from "react";
-import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginCard from "./components/LoginCard";
-import SignUp from "./components/SignUp";
+import SignUpWithDetails from "./components/SignUpWithDetails";
 import Dashboard from "./components/Dashboard";
 import PaymentForm from "./components/PaymentForm";
-import "./index.css"; // Tailwind CSS
-import SignUpWithDetails from "./components/SignUpWithDetails"
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -71,8 +94,40 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginCard />} />
         <Route path="/signup" element={<SignUpWithDetails />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/payment_details" element={<PaymentForm />} />
+
+        {/* Role-based protected routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute role="user">
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute role="admin">
+              <h1>Admin Dashboard</h1>
+            </PrivateRoute>
+          }
+        />
+
+        
+
+
+
+        <Route
+          path="/payment_details"
+          element={
+            <PrivateRoute role="user">
+              <PaymentForm />
+            </PrivateRoute>
+          }
+        />
+
+        <Route path="/unauthorized" element={<h1>Unauthorized Access</h1>} />
       </Routes>
     </BrowserRouter>
   );

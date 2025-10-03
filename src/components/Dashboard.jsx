@@ -292,7 +292,7 @@ export default function Dashboard() {
   return (
     <>
       <Navbar />
-      <div className="bg-[#b61825] pt-32 md:pt-40 px-3 md:px-6">
+      <div className="bg-[#b61825] pt-32 md:pt-40 px-3 md:px-6 py-10">
 
         {/* ==== Tiers Table ==== */}
         <div className="bg-white shadow-md rounded-xl p-3 md:p-6 max-w-5xl mx-auto m-6">

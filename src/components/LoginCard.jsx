@@ -109,6 +109,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/logo3.png";
+import Api from "../api/ApiIP"
 
 export default function LoginCard() {
   const navigate = useNavigate();
@@ -116,46 +117,64 @@ export default function LoginCard() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const response = await fetch("http://localhost:3000/users/sign_in", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          user: { email, password },
-        }),
-      });
+  try {
+    const response = await fetch(`${Api}/users/sign_in`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        user: { email, password },
+      }),
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        alert("Login failed: " + (errorData.error || "Invalid credentials"));
-        setLoading(false);
-        return;
-      }
-
-      const data = await response.json();
-      console.log("Login success:", data);
-
-      const token = response.headers.get("Authorization");
-      if (token) {
-        localStorage.setItem("authToken", token);
-      }
-
-      alert("Login successful!");
-      navigate("/dashboard");
-    } catch (error) {
-      console.error("Network error:", error);
-      alert("Something went wrong. Please try again later.");
-    } finally {
+    if (!response.ok) {
+      const errorData = await response.json();
+      alert("Login failed: " + (errorData.error || "Invalid credentials"));
       setLoading(false);
+      return;
     }
-  };
+
+    const data = await response.json();
+    console.log("Login success:", data);
+    const token = data.token;
+    localStorage.setItem("authToken", token);
+
+    // Map numeric role to string
+    let roleName = "";
+    switch (data.user.role) {
+      case 1:
+        roleName = "admin";
+        break;
+      case 2:
+        roleName = "user";
+        break;
+      default:
+        roleName = "user";
+    }
+    localStorage.setItem("role", roleName);
+
+    alert("Login successful!");
+
+    // Navigate based on role
+    if (roleName === "admin") {
+      navigate("/admin");
+    } else {
+      navigate("/dashboard");
+    }
+  } catch (error) {
+    console.error("Network error:", error);
+    alert("Something went wrong. Please try again later.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8">

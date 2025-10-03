@@ -1,3 +1,4 @@
 
-const Api = "http://localhost:3000/"
+const Api = "http://backend.bytesexchange.com"
+// const Api = "http://localhost:3000"
 export default Api;

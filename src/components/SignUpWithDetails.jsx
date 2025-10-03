@@ -237,6 +237,7 @@
 import { useState } from "react";
 import axios from "axios";
 import logo from "../assets/logo3.png";
+import Api from "../api/ApiIP"
 
 export default function SignUpWithDetails() {
   const [step, setStep] = useState(1);
@@ -344,7 +345,7 @@ export default function SignUpWithDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/users", {
+      const response = await axios.post(`${Api}/users`, {
         sign_up: formData,
       });
 
@@ -354,7 +355,7 @@ export default function SignUpWithDetails() {
 
       // Fetch PDF as blob
       const pdfResponse = await axios.get(
-        `http://localhost:3000/api/v1/certificate/${userId}.pdf`,
+        `${Api}/api/v1/certificate/${userId}.pdf`,
         { responseType: "blob" }
       );
 
@@ -371,10 +372,14 @@ export default function SignUpWithDetails() {
       setStep(1);
     } catch (error) {
       console.error("Signup failed:", error.response?.data || error);
-      alert("Signup failed. Please try again.");
+      
+      if (error.response?.data?.errors) {
+        alert(error.response.data.errors.join(", ")); 
+      } else {
+        alert("Signup failed. Please try again.");
+      }
     }
   };
-
 
 
   return (
@@ -388,7 +393,7 @@ export default function SignUpWithDetails() {
           {step === 1 && "Create Account"}
           {step === 2 && "Contribution Details"}
           {step === 3 && "Banking / Crypto Info"}
-          {step === 4 && "Acknowledgements"}
+          {step === 4 && "Acknowledgment"}
           {step === 5 && "Signature"}
         </h2>
 
