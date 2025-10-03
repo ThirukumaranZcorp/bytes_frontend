@@ -457,14 +457,6 @@ export default function SignUpWithDetails() {
 
                 required />
 
-
-
-
-
-
-
-
-
               <label className="flex items-center space-x-3 mt-2">
 
                 <span className="text-white text-md font-medium">
