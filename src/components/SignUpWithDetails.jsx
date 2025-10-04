@@ -241,6 +241,12 @@ import Api from "../api/ApiIP"
 
 export default function SignUpWithDetails() {
   const [step, setStep] = useState(1);
+  const today = new Date();
+  const issuanceDate = today.toISOString().split("T")[0];
+
+  const endDateObj = new Date(today);
+  endDateObj.setFullYear(endDateObj.getFullYear() + 1); // +1 year
+  const endDate = endDateObj.toISOString().split("T")[0];
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -251,9 +257,9 @@ export default function SignUpWithDetails() {
     residential_address: "",
     contribution_amount: "",
     currency: "GBP",
-    issuance_date: new Date().toISOString().split("T")[0],
-    start_date: "",
-    end_date: "",
+    issuance_date: issuanceDate,
+    start_date: issuanceDate,
+    end_date: endDate,
     method: "Bank",
     bank_name_or_crypto_type: "",
     account_name: "",
@@ -293,9 +299,6 @@ export default function SignUpWithDetails() {
   };
 
 
-
-
-
   const handleNext = (e) => {
     e.preventDefault();
     setStep(step + 1);
@@ -305,42 +308,6 @@ export default function SignUpWithDetails() {
     e.preventDefault();
     setStep(step - 1);
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     await axios.post("http://localhost:3000/users", {
-  //       sign_up: formData,
-  //     });
-  //     alert("Signup successful, certificate will be generated!");
-  //     setStep(1);
-
-  //   } catch (error) {
-  //     console.error("Signup failed:", error.response?.data || error);
-  //     alert("Signup failed. Please try again.");
-  //   }
-  // };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post("http://localhost:3000/users", {
-  //       sign_up: formData,
-  //     });
-  //     console.log(response.data.user,"-----------response")
-  //     const userId = response.data.user.id; // make sure your backend returns the new user's ID
-
-  //     alert("Signup successful, certificate will be generated!");
-
-  //     // Open PDF in new tab
-  //     window.open(`http://localhost:3000/api/v1/certificate/${userId}.pdf`, "_blank");
-  //     setStep(1);
-
-  //   } catch (error) {
-  //     console.error("Signup failed:", error.response?.data || error);
-  //     alert("Signup failed. Please try again.");
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -535,49 +502,57 @@ export default function SignUpWithDetails() {
               </select>
 
               <label className="flex items-center space-x-3 mt-2">
-
                 <span className="text-white text-md font-medium">
                   Issuance Date
                 </span>
               </label>
+              <input
+                type="date"
+                name="issuance_date"
+                value={formData.issuance_date}
+                onChange={(e) => {
+                  const issuanceDate = e.target.value;
+                  const startDate = issuanceDate; // start = issuance
+                  const endDateObj = new Date(issuanceDate);
+                  endDateObj.setFullYear(endDateObj.getFullYear() + 1); // +1 year
+                  const endDate = endDateObj.toISOString().split("T")[0];
 
-
-              <input type="date" name="issuance_date" value={formData.issuance_date}
-                onChange={handleChange} 
-                // className="w-full border rounded-lg px-3 py-2" 
+                  setFormData({
+                    ...formData,
+                    issuance_date: issuanceDate,
+                    start_date: startDate,
+                    end_date: endDate,
+                  });
+                }}
                 className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required />
+                required
+              />
 
               <label className="flex items-center space-x-3 mt-2">
-
                 <span className="text-white text-md font-medium" style={{ fontFamily: "Times New Roman" }}>
                   Start Date of Profit Term
                 </span>
-
               </label>
-
-              <input type="date" name="start_date" value={formData.start_date}
-                onChange={handleChange} 
-                placeholder="start_date"
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                required />
-              
+              <input
+                type="date"
+                name="start_date"
+                value={formData.start_date}
+                readOnly
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 cursor-not-allowed"
+              />
 
               <label className="flex items-center space-x-3 mt-2">
-
                 <span className="text-white text-md font-medium">
-                 End Date of Profit Term
+                  End Date of Profit Term
                 </span>
               </label>
-
-              <input type="date" name="end_date" value={formData.end_date}
-                onChange={handleChange}
-                placeholder="end_date" 
-                // className="w-full border rounded-lg px-3 py-2"
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required />
+              <input
+                type="date"
+                name="end_date"
+                value={formData.end_date}
+                readOnly
+                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 cursor-not-allowed"
+              />
             </>
           )}
 

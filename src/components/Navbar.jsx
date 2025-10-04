@@ -40,14 +40,14 @@ export default function Navbar() {
           </div> */}
 
           {/* Call to Action Button */}
-          <div className="hidden md:flex">
+          {/* <div className="hidden md:flex">
             <a
               href="/signup"
               className="bg-[#b61825] text-white px-4 py-2 rounded-xl shadow hover:bg-black transition duration-200"
             >
               SignUp
             </a>
-          </div>
+          </div> */}
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">

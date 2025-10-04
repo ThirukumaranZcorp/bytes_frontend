@@ -220,16 +220,17 @@ import { useState } from "react";
 import Navbar from "./Navbar";
 
 const tiers = [
-  { name: "Starter", min: 1000, max: 2500, risk: "High", color: "bg-red-500" },
-  { name: "Growth", min: 2501, max: 5000, risk: "Moderate-High", color: "bg-orange-400" },
-  { name: "Intermediate", min: 5001, max: 12000, risk: "Moderate", color: "bg-yellow-400" },
-  { name: "Advanced", min: 12001, max: 30000, risk: "Moderate-Low", color: "bg-green-300" },
-  { name: "Professional", min: 30001, max: 60000, risk: "Low", color: "bg-green-400" },
-  { name: "Institutional", min: 60001, max: 200000, risk: "Very Low", color: "bg-teal-400" },
-  { name: "Enterprise", min: 200001, max: 1000000, risk: "Very Low", color: "bg-teal-400" },
-  { name: "Family Office", min: 1000001, max: 5000000, risk: "Ultra Low", color: "bg-cyan-400" },
-  { name: "Sovereign", min: 5000001, max: 100000000, risk: "Minimal", color: "bg-green-200" },
+  { name: "Starter", min: 1000, max: 2500, risk: "High", color: "#E63946" },        // Red
+  { name: "Growth", min: 2501, max: 5000, risk: "Moderate-High", color: "#F77F00" }, // Orange
+  { name: "Intermediate", min: 5001, max: 12000, risk: "Moderate", color: "#F9C74F" }, // Amber
+  { name: "Advanced", min: 12001, max: 30000, risk: "Moderate-Low", color: "#90BE6D" }, // Light Green
+  { name: "Professional", min: 30001, max: 60000, risk: "Low", color: "#43AA8B" },   // Green ✅ fixed
+  { name: "Institutional", min: 60001, max: 200000, risk: "Very Low", color: "#4D908E" }, // Teal
+  { name: "Enterprise", min: 200001, max: 1000000, risk: "Very Low", color: "#577590" }, // Blue-Green
+  { name: "Family Office", min: 1000001, max: 5000000, risk: "Ultra Low", color: "#48CAE4" }, // Sky Blue
+  { name: "Sovereign", min: 5000001, max: 100000000, risk: "Minimal", color: "#ADE8F4" }, // Pale Cyan
 ];
+
 
 const currencyOptions = [
   { code: "USD", label: "USD ($)" },
@@ -313,9 +314,13 @@ export default function Dashboard() {
                     <td className="border p-2">
                       {t.min.toLocaleString()} – {t.max.toLocaleString()}
                     </td>
-                    <td className={`border p-2 font-bold text-white ${t.color}`}>
+                    <td
+                      className="border p-2 font-bold text-white"
+                      style={{ backgroundColor: t.color }}
+                    >
                       {t.risk}
                     </td>
+
                   </tr>
                 ))}
               </tbody>
@@ -364,6 +369,7 @@ export default function Dashboard() {
               className="w-full border border-gray-300 rounded-lg p-2 mb-3"
               value={fee}
               onChange={(e) => setFee(parseFloat(e.target.value))}
+              disabled={true} // Disable editing
             />
 
             <button
