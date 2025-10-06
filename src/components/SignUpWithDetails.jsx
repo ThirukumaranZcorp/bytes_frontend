@@ -238,6 +238,8 @@ import { useState } from "react";
 import axios from "axios";
 import logo from "../assets/logo3.png";
 import Api from "../api/ApiIP"
+import InvestmentChart from "./InvestmentChart";
+
 
 export default function SignUpWithDetails() {
   const [step, setStep] = useState(1);
@@ -247,6 +249,8 @@ export default function SignUpWithDetails() {
   const endDateObj = new Date(today);
   endDateObj.setFullYear(endDateObj.getFullYear() + 1); // +1 year
   const endDate = endDateObj.toISOString().split("T")[0];
+  const [showChart, setShowChart] = useState(false);
+
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -311,6 +315,10 @@ export default function SignUpWithDetails() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.password_confirmation) {
+      alert("Passwords do not match!");
+      return;
+    }
     try {
       const response = await axios.post(`${Api}/users`, {
         sign_up: formData,
@@ -350,459 +358,486 @@ export default function SignUpWithDetails() {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="bg-[#b61825] shadow-lg rounded-xl p-8 w-full max-w-lg">
-        <div className="flex justify-center mb-4">
-          <img src={logo} alt="logo" className="w-30 h-30 object-contain drop-shadow-md" />
-        </div>
-
-        <h2 className="text-2xl font-bold text-center mb-6 text-white">
-          {step === 1 && "Create Account"}
-          {step === 2 && "Contribution Details"}
-          {step === 3 && "Banking / Crypto Info"}
-          {step === 4 && "Acknowledgment"}
-          {step === 5 && "Signature"}
-        </h2>
-
-        <form onSubmit={step === 5 ? handleSubmit : handleNext} className="space-y-4">
-
-          {/* STEP 1 */}
-          {step === 1 && (
-            <>
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Full Name
-                </span>
-              </label>
-              <input type="text" name="fullName" placeholder="Full Name"
-                value={formData.fullName} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2 bg-white" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required />
-
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Email
-                </span>
-              </label>
-
-
-
-
-              <input type="email" name="email" placeholder="Email"
-                value={formData.email} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                required />
-
-
-
-
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Password
-                </span>
-              </label>
-
-              <input type="password" name="password" placeholder="password"
-                value={formData.password} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                required />
-
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Confirm Password
-                </span>
-              </label>
-
-              <input type="password" name="password_confirmation" placeholder="confrim password"
-                value={formData.password_confirmation} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                required />
-
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Phone
-                </span>
-              </label>
-
-
-              <input type="text" name="phone_number" placeholder="Phone (optional)"
-                value={formData.phone_number} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                />
-
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Address
-                </span>
-              </label>
-
-
-              <input type="text" name="residential_address" placeholder="Residential Address (optional)"
-                value={formData.residential_address} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                />
-            </>
-          )}
-
-          {/* STEP 2 */}
-          {step === 2 && (
-            <>
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Contribution Amount
-                </span>
-              </label>
-
-              <input type="number" name="contribution_amount" placeholder="Contribution Amount"
-                value={formData.contribution_amount} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                
-                required />
-
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Select Currency
-                </span>
-              </label>
-
-
-              <select name="currency" value={formData.currency} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2"
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                >
-                <option>GBP</option>
-                <option>USD</option>
-                <option>EUR</option>
-                <option>PHP</option>
-                <option>USDT</option>
-                <option>BTC</option>
-                <option>ETH</option>
-              </select>
-
-              <label className="flex items-center space-x-3 mt-2">
-                <span className="text-white text-md font-medium">
-                  Issuance Date
-                </span>
-              </label>
-              <input
-                type="date"
-                name="issuance_date"
-                value={formData.issuance_date}
-                onChange={(e) => {
-                  const issuanceDate = e.target.value;
-                  const startDate = issuanceDate; // start = issuance
-                  const endDateObj = new Date(issuanceDate);
-                  endDateObj.setFullYear(endDateObj.getFullYear() + 1); // +1 year
-                  const endDate = endDateObj.toISOString().split("T")[0];
-
-                  setFormData({
-                    ...formData,
-                    issuance_date: issuanceDate,
-                    start_date: startDate,
-                    end_date: endDate,
-                  });
-                }}
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-
-              <label className="flex items-center space-x-3 mt-2">
-                <span className="text-white text-md font-medium" style={{ fontFamily: "Times New Roman" }}>
-                  Start Date of Profit Term
-                </span>
-              </label>
-              <input
-                type="date"
-                name="start_date"
-                value={formData.start_date}
-                readOnly
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 cursor-not-allowed"
-              />
-
-              <label className="flex items-center space-x-3 mt-2">
-                <span className="text-white text-md font-medium">
-                  End Date of Profit Term
-                </span>
-              </label>
-              <input
-                type="date"
-                name="end_date"
-                value={formData.end_date}
-                readOnly
-                className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 cursor-not-allowed"
-              />
-            </>
-          )}
-
-          {/* STEP 3 */}
-          {step === 3 && (
-            <>
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Select Method
-                </span>
-              </label>
-
-              <select name="method" value={formData.method} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2"
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                >
-                <option value="Bank">Bank</option>
-                <option value="Crypto">Crypto</option>
-              </select>
-
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Enter Bank Name / Crypto Type
-                </span>
-              </label>
-
-
-              <input type="text" name="bank_name_or_crypto_type" placeholder="Bank / Crypto Type"
-                value={formData.bank_name_or_crypto_type} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                required />
-
-
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Account Name
-                </span>
-              </label>
-
-
-              <input type="text" name="account_name" placeholder="Account Name"
-                value={formData.account_name} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                />
-
-
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Account Number
-                </span>
-              </label>
-
-
-
-              <input type="text" name="account_number_or_wallet" placeholder="Account Number / Wallet"
-                value={formData.account_number_or_wallet} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                required />
-
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  SWIFT / Protocol
-                </span>
-              </label>
-
-
-              <input type="text" name="swift_or_protocol" placeholder="SWIFT / Protocol"
-                value={formData.swift_or_protocol} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                />
-            </>
-          )}
-
-          {/* {step === 4 && (
-            <>
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  name="terms_accepted"
-                  checked={formData.terms_accepted}
-                  onChange={handleChange}
-                  className="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"
-                />
-                <span className="text-white text-sm font-medium">
-                  I accept the Terms and Conditions
-                </span>
-              </label>
-
-              <label className="flex items-center space-x-3 mt-2">
-                <input
-                  type="checkbox"
-                  name="risk_disclosure_accepted"
-                  checked={formData.risk_disclosure_accepted}
-                  onChange={handleChange}
-                  className="h-5 w-5 text-green-500 rounded border-gray-300 focus:ring-2 focus:ring-green-400"
-                />
-                <span className="text-white text-sm font-medium">
-                  I acknowledge the Risk Disclosure
-                </span>
-              </label>
-
-              <label className="flex items-center space-x-3 mt-2">
-                <input
-                  type="checkbox"
-                  name="renewal_fee_accepted"
-                  checked={formData.renewal_fee_accepted}
-                  onChange={handleChange}
-                  className="h-5 w-5 text-purple-500 rounded border-gray-300 focus:ring-2 focus:ring-purple-400"
-                />
-                <span className="text-white text-sm font-medium">
-                  I agree to the 5% renewal fee
-                </span>
-              </label>
-            </>
-          )} */}
-
-          {step === 4 && (
-            <>
-              <div className="bg-white p-4 rounded-lg h-48 overflow-y-scroll mb-4 text-black">
-                <h3 className="font-semibold mb-2" style={{ fontFamily: "Times New Roman" }}>Profit Sharing and Payment Schedule</h3>
-                <p>
-                  The Participant shall be entitled to receive a share of the trading profits generated during the Profit Term as follows:
-                </p>
-                <ul className="list-disc ml-6">
-                  <li><strong>Profit Sharing:</strong> The Investment Chart reflects the Company’s assessment of profit share ranges and corresponding risk levels at a given point in time. These ranges and risk levels are subject to revision without prior notice in order to align with market conditions, strategic adjustments, and portfolio management considerations.</li>
-                  <li><strong>Payment Schedule:</strong> Distributions shall be processed within twenty-four (24) hours or the next business day following the receipt of funds. Thereafter, subsequent distributions shall follow a recurring one-month cycle, with profits made available to the Participant on a monthly basis for the duration of the Profit Term.</li>
-                </ul>
-
-                <h3 className="font-semibold mt-4 mb-2" style={{ fontFamily: "Times New Roman" }}>Risk Disclosure</h3>
-                <p>The Participant acknowledges and accepts that all trading, exchange, and investment activities involve inherent risks, including but not limited to market volatility, liquidity fluctuations, and regulatory changes. While the Company endeavors to implement prudent strategies and operational safeguards to enhance accuracy and consistency,<strong> returns beyond the stated minimum guaranteed share cannot be assured.</strong></p>
-                <p>By entering into this arrangement, the Participant confirms that they:</p>
-                 <ol className="list-disc ml-6">
-                  <li>Understand the nature of the risks involved in trading and exchange activities;</li>
-                  <li>Have reviewed the Investment Chart to gain a clear understanding of the allowable ranges and associated risk levels;</li>
-                  <li>Accept full responsibility for their decision to participate as an informed and knowledgeable investor.</li>
-                </ol>
-                <p>The Company shall not be held liable for losses or reduced returns arising from market conditions or factors beyond its reasonable control.</p>
-                
-                
-                
-                <h3 className="font-semibold mt-4 mb-2" style={{ fontFamily: "Times New Roman" }}>Return of Contribution & Renewal</h3>
-                <p>Within thirty (30) days after the conclusion of the Profit Term (a period of one year or twelve [12] months of equivalent participation), the Participant shall have the option to:</p>
-                <ol className="list-disc ml-6">
-                  <li><strong>Withdraw</strong> the original Contribution in full; or</li>
-                  <li><strong>Reinvest</strong> the Contribution into a new profit-sharing term under mutually agreed conditions, subject to a <strong>renewal fee of five percent (5%) </strong>of the Contribution, which shall be deducted at the time of renewal.</li>
-                </ol>
-
-                <p>Failure of the Participant to provide written instruction within the thirty (30) day period may, at the Company’s discretion, result in automatic renewal of the Contribution under the prevailing terms and conditions, inclusive of the applicable renewal fee.</p>
-              </div>
-
-              {/* Checkboxes */}
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  name="terms_accepted"
-                  checked={formData.terms_accepted}
-                  onChange={handleChange}
-                  className="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"
-                />
-                <span className="text-white text-md font-medium">
-                  I accept the Terms and Conditions
-                </span>
-              </label>
-
-              <label className="flex items-center space-x-3 mt-2">
-                <input
-                  type="checkbox"
-                  name="risk_disclosure_accepted"
-                  checked={formData.risk_disclosure_accepted}
-                  onChange={handleChange}
-                  className="h-5 w-5 text-green-500 rounded border-gray-300 focus:ring-2 focus:ring-green-400"
-                />
-                <span className="text-white text-md font-medium">
-                  I acknowledge the Risk Disclosure
-                </span>
-              </label>
-
-              <label className="flex items-center space-x-3 mt-2">
-                <input
-                  type="checkbox"
-                  name="renewal_fee_accepted"
-                  checked={formData.renewal_fee_accepted}
-                  onChange={handleChange}
-                  className="h-5 w-5 text-purple-500 rounded border-gray-300 focus:ring-2 focus:ring-purple-400"
-                />
-                <span className="text-white text-md font-medium">
-                  I agree to the 5% renewal fee
-                </span>
-              </label>
-            </>
-          )}
-
-
-
-          {/* STEP 5 */}
-          {step === 5 && (
-            <>
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Full name
-                </span>
-              </label>
-
-              <input type="text" name="typed_name" placeholder="Type your full name"
-                value={formData.typed_name} onChange={handleChange}
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"                
-                required />
-              <label className="flex items-center space-x-3 mt-2">
-
-                <span className="text-white text-md font-medium">
-                  Date of Signing
-                </span>
-              </label>
-              <input type="date" name="date_signed" value={formData.date_signed}
-                onChange={handleChange} 
-                // className="w-full border rounded-lg px-3 py-2" 
-                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required />
-            </>
-          )}
-
-          {/* Navigation Buttons */}
-          <div className="flex justify-between">
-            {step > 1 && (
-              <button onClick={handleBack} className="bg-gray-500 text-white px-4 py-2 rounded-lg">
-                Back
-              </button>
-            )}
-            <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-              {step === 5 ? "Submit" : "Next"}
-            </button>
+    <>
+      {!showChart &&(
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        
+        <div className="bg-[#b61825] shadow-lg rounded-xl p-8 w-full max-w-lg">
+          <div className="flex justify-center mb-4">
+            <img src={logo} alt="logo" className="w-30 h-30 object-contain drop-shadow-md" />
           </div>
-        </form>
+
+          <h2 className="text-2xl font-bold text-center mb-6 text-white">
+            {step === 1 && "Create Account"}
+            {step === 2 && "Contribution Details"}
+            {step === 3 && "Banking / Crypto Info"}
+            {step === 4 && "Acknowledgment"}
+            {step === 5 && "Signature"}
+          </h2>
+
+          <form onSubmit={step === 5 ? handleSubmit : handleNext} className="space-y-4">
+
+            {/* STEP 1 */}
+            {step === 1 && (
+              <>
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Full Name
+                  </span>
+                </label>
+                <input type="text" name="fullName" placeholder="Full Name"
+                  value={formData.fullName} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2 bg-white" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required />
+
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Email
+                  </span>
+                </label>
+
+
+
+
+                <input type="email" name="email" placeholder="Email"
+                  value={formData.email} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  required />
+
+
+
+
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Password
+                  </span>
+                </label>
+
+                <input type="password" name="password" placeholder="password"
+                  value={formData.password} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  required />
+
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Confirm Password
+                  </span>
+                </label>
+
+                <input type="password" name="password_confirmation" placeholder="confrim password"
+                  value={formData.password_confirmation} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  required />
+
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Phone
+                  </span>
+                </label>
+
+
+                <input type="text" name="phone_number" placeholder="Phone (optional)"
+                  value={formData.phone_number} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  />
+
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Address
+                  </span>
+                </label>
+
+
+                <input type="text" name="residential_address" placeholder="Residential Address (optional)"
+                  value={formData.residential_address} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  />
+              </>
+            )}
+
+            {/* STEP 2 */}
+            {step === 2 && (
+              <>
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Contribution Amount
+                  </span>
+                </label>
+
+                <input type="number" name="contribution_amount" placeholder="Contribution Amount"
+                  value={formData.contribution_amount} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  
+                  required />
+
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Select Currency
+                  </span>
+                </label>
+
+
+                <select name="currency" value={formData.currency} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2"
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  >
+                  <option>GBP</option>
+                  <option>USD</option>
+                  <option>EUR</option>
+                  <option>PHP</option>
+                  <option>USDT</option>
+                  <option>BTC</option>
+                  <option>ETH</option>
+                </select>
+
+                <label className="flex items-center space-x-3 mt-2">
+                  <span className="text-white text-md font-medium">
+                    Issuance Date
+                  </span>
+                </label>
+                <input
+                  type="date"
+                  name="issuance_date"
+                  value={formData.issuance_date}
+                  onChange={(e) => {
+                    const issuanceDate = e.target.value;
+                    const startDate = issuanceDate; // start = issuance
+                    const endDateObj = new Date(issuanceDate);
+                    endDateObj.setFullYear(endDateObj.getFullYear() + 1); // +1 year
+                    const endDate = endDateObj.toISOString().split("T")[0];
+
+                    setFormData({
+                      ...formData,
+                      issuance_date: issuanceDate,
+                      start_date: startDate,
+                      end_date: endDate,
+                    });
+                  }}
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+
+                <label className="flex items-center space-x-3 mt-2">
+                  <span className="text-white text-md font-medium" style={{ fontFamily: "Times New Roman" }}>
+                    Start Date of Profit Term
+                  </span>
+                </label>
+                <input
+                  type="date"
+                  name="start_date"
+                  value={formData.start_date}
+                  readOnly
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 cursor-not-allowed"
+                />
+
+                <label className="flex items-center space-x-3 mt-2">
+                  <span className="text-white text-md font-medium">
+                    End Date of Profit Term
+                  </span>
+                </label>
+                <input
+                  type="date"
+                  name="end_date"
+                  value={formData.end_date}
+                  readOnly
+                  className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 cursor-not-allowed"
+                />
+              </>
+            )}
+
+            {/* STEP 3 */}
+            {step === 3 && (
+              <>
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Select Method
+                  </span>
+                </label>
+
+                <select name="method" value={formData.method} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2"
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  >
+                  <option value="Bank">Bank</option>
+                  <option value="Crypto">Crypto</option>
+                </select>
+
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Enter Bank Name / Crypto Type
+                  </span>
+                </label>
+
+
+                <input type="text" name="bank_name_or_crypto_type" placeholder="Bank / Crypto Type"
+                  value={formData.bank_name_or_crypto_type} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  required />
+
+
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Account Name
+                  </span>
+                </label>
+
+
+                <input type="text" name="account_name" placeholder="Account Name"
+                  value={formData.account_name} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  />
+
+
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Account Number
+                  </span>
+                </label>
+
+
+
+                <input type="text" name="account_number_or_wallet" placeholder="Account Number / Wallet"
+                  value={formData.account_number_or_wallet} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  required />
+
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    SWIFT / Protocol
+                  </span>
+                </label>
+
+
+                <input type="text" name="swift_or_protocol" placeholder="SWIFT / Protocol"
+                  value={formData.swift_or_protocol} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+                  />
+              </>
+            )}
+
+            {/* {step === 4 && (
+              <>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    name="terms_accepted"
+                    checked={formData.terms_accepted}
+                    onChange={handleChange}
+                    className="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span className="text-white text-sm font-medium">
+                    I accept the Terms and Conditions
+                  </span>
+                </label>
+
+                <label className="flex items-center space-x-3 mt-2">
+                  <input
+                    type="checkbox"
+                    name="risk_disclosure_accepted"
+                    checked={formData.risk_disclosure_accepted}
+                    onChange={handleChange}
+                    className="h-5 w-5 text-green-500 rounded border-gray-300 focus:ring-2 focus:ring-green-400"
+                  />
+                  <span className="text-white text-sm font-medium">
+                    I acknowledge the Risk Disclosure
+                  </span>
+                </label>
+
+                <label className="flex items-center space-x-3 mt-2">
+                  <input
+                    type="checkbox"
+                    name="renewal_fee_accepted"
+                    checked={formData.renewal_fee_accepted}
+                    onChange={handleChange}
+                    className="h-5 w-5 text-purple-500 rounded border-gray-300 focus:ring-2 focus:ring-purple-400"
+                  />
+                  <span className="text-white text-sm font-medium">
+                    I agree to the 5% renewal fee
+                  </span>
+                </label>
+              </>
+            )} */}
+
+            {step === 4 && (
+              <>
+                <div className="bg-white p-4 rounded-lg h-48 overflow-y-scroll mb-4 text-black">
+                  <h3 className="font-semibold mb-2" style={{ fontFamily: "Times New Roman" }}>Profit Sharing and Payment Schedule</h3>
+                  <p>
+                    The Participant shall be entitled to receive a share of the trading profits generated during the Profit Term as follows:
+                  </p>
+                  <ul className="list-disc ml-6">
+                    <li><strong>Profit Sharing:</strong> The 
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShowChart(true);
+                      }}
+                      // className="text-blue-500 underline"
+                      className="text-blue-500 underline mx-1"
+                    >
+                       Investment Chart 
+                    </a>
+                    reflects the Company’s assessment of profit share ranges and corresponding risk levels at a given point in time. These ranges and risk levels are subject to revision without prior notice in order to align with market conditions, strategic adjustments, and portfolio management considerations.</li>
+                    <li><strong>Payment Schedule:</strong> Distributions shall be processed within twenty-four (24) hours or the next business day following the receipt of funds. Thereafter, subsequent distributions shall follow a recurring one-month cycle, with profits made available to the Participant on a monthly basis for the duration of the Profit Term.</li>
+                  </ul>
+
+                  <h3 className="font-semibold mt-4 mb-2" style={{ fontFamily: "Times New Roman" }}>Risk Disclosure</h3>
+                  <p>The Participant acknowledges and accepts that all trading, exchange, and investment activities involve inherent risks, including but not limited to market volatility, liquidity fluctuations, and regulatory changes. While the Company endeavors to implement prudent strategies and operational safeguards to enhance accuracy and consistency,<strong> returns beyond the stated minimum guaranteed share cannot be assured.</strong></p>
+                  <p>By entering into this arrangement, the Participant confirms that they:</p>
+                  <ol className="list-disc ml-6">
+                    <li>Understand the nature of the risks involved in trading and exchange activities;</li>
+                    <li>Have reviewed the Investment Chart to gain a clear understanding of the allowable ranges and associated risk levels;</li>
+                    <li>Accept full responsibility for their decision to participate as an informed and knowledgeable investor.</li>
+                  </ol>
+                  <p>The Company shall not be held liable for losses or reduced returns arising from market conditions or factors beyond its reasonable control.</p>
+                  
+                  
+                  
+                  <h3 className="font-semibold mt-4 mb-2" style={{ fontFamily: "Times New Roman" }}>Return of Contribution & Renewal</h3>
+                  <p>Within thirty (30) days after the conclusion of the Profit Term (a period of one year or twelve [12] months of equivalent participation), the Participant shall have the option to:</p>
+                  <ol className="list-disc ml-6">
+                    <li><strong>Withdraw</strong> the original Contribution in full; or</li>
+                    <li><strong>Reinvest</strong> the Contribution into a new profit-sharing term under mutually agreed conditions, subject to a <strong>renewal fee of five percent (5%) </strong>of the Contribution, which shall be deducted at the time of renewal.</li>
+                  </ol>
+
+                  <p>Failure of the Participant to provide written instruction within the thirty (30) day period may, at the Company’s discretion, result in automatic renewal of the Contribution under the prevailing terms and conditions, inclusive of the applicable renewal fee.</p>
+                </div>
+
+                {/* Checkboxes */}
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    name="terms_accepted"
+                    checked={formData.terms_accepted}
+                    onChange={handleChange}
+                    className="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span className="text-white text-md font-medium">
+                    I accept the Terms and Conditions
+                  </span>
+                </label>
+
+                <label className="flex items-center space-x-3 mt-2">
+                  <input
+                    type="checkbox"
+                    name="risk_disclosure_accepted"
+                    checked={formData.risk_disclosure_accepted}
+                    onChange={handleChange}
+                    className="h-5 w-5 text-green-500 rounded border-gray-300 focus:ring-2 focus:ring-green-400"
+                  />
+                  <span className="text-white text-md font-medium">
+                    I acknowledge the Risk Disclosure
+                  </span>
+                </label>
+
+                <label className="flex items-center space-x-3 mt-2">
+                  <input
+                    type="checkbox"
+                    name="renewal_fee_accepted"
+                    checked={formData.renewal_fee_accepted}
+                    onChange={handleChange}
+                    className="h-5 w-5 text-purple-500 rounded border-gray-300 focus:ring-2 focus:ring-purple-400"
+                  />
+                  <span className="text-white text-md font-medium">
+                    I agree to the 5% renewal fee
+                  </span>
+                </label>
+              </>
+            )}
+
+
+
+            {/* STEP 5 */}
+            {step === 5 && (
+              <>
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Full name
+                  </span>
+                </label>
+
+                <input type="text" name="typed_name" placeholder="Type your full name"
+                  value={formData.typed_name} onChange={handleChange}
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"                
+                  required />
+                <label className="flex items-center space-x-3 mt-2">
+
+                  <span className="text-white text-md font-medium">
+                    Date of Signing
+                  </span>
+                </label>
+                <input type="date" name="date_signed" value={formData.date_signed}
+                  onChange={handleChange} 
+                  // className="w-full border rounded-lg px-3 py-2" 
+                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required />
+              </>
+            )}
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-between">
+              {step > 1 && (
+                <button onClick={handleBack} className="bg-gray-500 text-white px-4 py-2 rounded-lg">
+                  Back
+                </button>
+              )}
+              <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                {step === 5 ? "Submit" : "Next"}
+              </button>
+            </div>
+          </form>
+
+
+
+        </div>
+        
       </div>
-    </div>
+      )}
+      {showChart && (
+          <div className="my-4">
+            
+            <InvestmentChart handleShow= {()=> setShowChart(false)} />
+          </div>
+        )}
+    </>
   );
 }
