@@ -86,12 +86,15 @@ import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Api from "../api/ApiIP";
 import AdminNavbar from "./AdminNavbar"
+import CreateNotification from "./CreateNotification";
 
 export default function AdminDashboard() {
   const [userDetails, setUserDetails] = useState([]);
   const [expandedUserId, setExpandedUserId] = useState(null);
   const [file, setFile] = useState(null);
   const Token = sessionStorage.getItem("authToken");
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const togglePopup = () => setIsPopupOpen(!isPopupOpen);
 
   // Fetch users
   const fetchData = async () => {
@@ -222,6 +225,7 @@ export default function AdminDashboard() {
               <thead>
                 <tr className="bg-gray-100">
                   <th className="border p-2">Name</th>
+                  
                   <th className="border p-2">Currency</th>
                   <th className="border p-2">Contribution Amount</th>
                   <th className="border p-2">Start Date</th>
@@ -236,7 +240,9 @@ export default function AdminDashboard() {
                         onClick={() => toggleExpand(user.id)}
                       >
                         <td className="border p-2">{user.name}</td>
+                        
                         <td className="border p-2">{user.currency}</td>
+
                         <td className="border p-2 font-bold">{user.contribution_amount}</td>
                         <td className="border p-2 font-bold">{user.start_date}</td>
                       </tr>
@@ -244,82 +250,82 @@ export default function AdminDashboard() {
                       {expandedUserId === user.id && (
                         <tr>
                           <td colSpan="4" className="border p-4 bg-gray-50">
-                            {/* User Details and File Upload */}
-                            <div className="mb-4">
-                              <p><strong>Name:</strong> {user.name}</p>
-                              <p><strong>Currency:</strong> {user.currency}</p>
-                              <p><strong>Contribution:</strong> {user.contribution_amount}</p>
-                              <p><strong>Start Date:</strong> {user.start_date}</p>
-                            </div>
-                            {/* <div className="flex flex-col md:flex-row md:items-center gap-4">
-                              <input
-                                type="file"
-                                accept=".json,.csv"
-                                onChange={handleFileChange}
-                                className="border p-2 rounded w-full md:w-auto"
-                              />
-                              <button
-                                onClick={() => handleUpload(user.id)}
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
-                              >
-                                Upload CSV
-                              </button>
-                              <button
-                                onClick={() => handleUpload(user.id)}
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
-                              >
-                                Form Upload
-                              </button>
-                            </div> */}
+
                             <div className="mt-10 bg-white shadow-md rounded-xl p-6 max-w-6xl mx-auto">
-                            <h2 className="text-2xl font-semibold mb-4">Transactions</h2>
+                              {/* User Details and File Upload */}
+                              <div className="mt-10 bg-white shadow-md rounded-xl p-6 max-w-6xl mx-auto">
 
-                            <div className="flex gap-4 mb-4">
-                              <input type="file" accept=".csv" onChange={handleFileChange} />
-                              <button
-                                onClick={handleTransactionUpload}
-                                className="bg-green-600 text-white px-4 py-2 rounded"
-                              >
-                                Upload Transactions CSV
-                              </button>
-                            </div>
+                                <div className="flex items-center justify-between p-4 ">
+                                  {/* Left side - Title */}
+                                  <h2 className="text-2xl font-semibold text-gray-800">User Details</h2>
 
-                            <table className="w-full border-collapse text-sm md:text-base">
-                              <thead>
-                                <tr className="bg-gray-100">
-                                  <th className="border p-2">Month</th>
-                                  <th className="border p-2">Confirmation #</th>
-                                  <th className="border p-2">Date</th>
-                                  <th className="border p-2">From Account</th>
-                                  <th className="border p-2">To Account</th>
-                                  <th className="border p-2">Amount</th>
-                                  <th className="border p-2">Status</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {transactions.length > 0 ? (
-                                  transactions.map((t, idx) => (
-                                    <tr key={idx} className="text-center">
-                                      <td className="border p-2">{t.month}</td>
-                                      <td className="border p-2">{t.confirmation_number}</td>
-                                      <td className="border p-2">{t.transaction_date}</td>
-                                      <td className="border p-2">{t.from_account}</td>
-                                      <td className="border p-2">{t.to_account}</td>
-                                      <td className="border p-2">{t.amount}</td>
-                                      <td className="border p-2">{t.status}</td>
+                                  {/* Right side - Notification Button */}
+                                  <button
+                                    onClick={togglePopup}
+                                    className="p-2 rounded-full bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-600 transition-colors duration-200 focus:outline-none"
+                                  >
+                                    <i className="fas fa-bell text-2xl"></i>
+                                  </button>
+                                </div>
+                                <div className="mb-4">
+                                  <p><strong>Name:</strong> {user.name}</p>
+                                  <p><strong>Currency:</strong> {user.currency}</p>
+                                  <p><strong>Contribution:</strong> {user.contribution_amount}</p>
+                                  <p><strong>Start Date:</strong> {user.start_date}</p>
+                                  <p><strong>Email:</strong> {user.email}</p>
+                                </div>
+                              </div>
+
+                              
+                              <div className="mt-10 bg-white shadow-md rounded-xl p-6 max-w-6xl mx-auto">
+                                <h2 className="text-2xl font-semibold mb-4">Transactions</h2>
+
+                                <div className="flex gap-4 mb-4">
+                                  <input type="file" accept=".csv" onChange={handleFileChange} />
+                                  <button
+                                    onClick={handleTransactionUpload}
+                                    className="bg-green-600 text-white px-4 py-2 rounded"
+                                  >
+                                    Upload Transactions CSV
+                                  </button>
+                                </div>
+
+                                <table className="w-full border-collapse text-sm md:text-base">
+                                  <thead>
+                                    <tr className="bg-gray-100">
+                                      <th className="border p-2">Month</th>
+                                      <th className="border p-2">Confirmation #</th>
+                                      <th className="border p-2">Date</th>
+                                      <th className="border p-2">From Account</th>
+                                      <th className="border p-2">To Account</th>
+                                      <th className="border p-2">Amount</th>
+                                      <th className="border p-2">Status</th>
                                     </tr>
-                                  ))
-                                ) : (
-                                  <tr>
-                                    <td colSpan="7" className="border p-2 text-gray-500">
-                                      No transactions yet
-                                    </td>
-                                  </tr>
-                                )}
-                              </tbody>
-                            </table>
-                          </div>
-
+                                  </thead>
+                                  <tbody>
+                                    {transactions.length > 0 ? (
+                                      transactions.map((t, idx) => (
+                                        <tr key={idx} className="text-center">
+                                          <td className="border p-2">{t.month}</td>
+                                          <td className="border p-2">{t.confirmation_number}</td>
+                                          <td className="border p-2">{t.transaction_date}</td>
+                                          <td className="border p-2">{t.from_account}</td>
+                                          <td className="border p-2">{t.to_account}</td>
+                                          <td className="border p-2">{t.amount}</td>
+                                          <td className="border p-2">{t.status}</td>
+                                        </tr>
+                                      ))
+                                    ) : (
+                                      <tr>
+                                        <td colSpan="7" className="border p-2 text-gray-500">
+                                          No transactions yet
+                                        </td>
+                                      </tr>
+                                    )}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
 
                           </td>
                         </tr>
@@ -338,6 +344,18 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+      {/* Popup */}
+      {isPopupOpen && (
+        <div className="fixed inset-0 bg-black/70 bg-opacity-50 flex justify-center items-start pt-20 z-50">
+          <div className="bg-white rounded shadow-lg w-126 relative">
+            {/* Close button */}
+
+
+            {/* Render the CreateNotification form */}
+            <CreateNotification  user={expandedUserId} onCencel={()=> setIsPopupOpen(false)}/>
+          </div>
+        </div>
+      )}
     </>
   );
 }

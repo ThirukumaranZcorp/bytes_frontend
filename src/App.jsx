@@ -139,7 +139,8 @@ import PaymentForm from "./components/PaymentForm";
 import PrivateRoute from "./components/PrivateRoute";
 import AdminDashboard from "./components/AdminDashboard";
 import ProfileSettings from "./components/ProfileSettings";
-
+import ChangePassword from "./components/ChangePassword";
+import CreateNotification from "./components/CreateNotification";
 
 
 function App() {
@@ -186,6 +187,25 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/change-password"
+          element={
+            <PrivateRoute role="user">
+              <ChangePassword />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/create-notification"
+          element={
+            <PrivateRoute role="admin">
+              <CreateNotification />
+            </PrivateRoute>
+          }
+        />
+
+
 
         <Route
           path="/admin"

@@ -515,32 +515,34 @@ export default function ProfileSettings() {
               disabled
             />
           </div>
-          {/* <div>
-            <label className="block font-semibold">Change passowrd</label>
-            <input
-              type="password"
-              name="password"
-              value={profile.password}
-              onChange={handleChange}
-              className="w-full border p-2 rounded-lg"
-            />
-          </div> */}
         </div>
+        <hr className="border-t border-gray-300 my-6" />
+        <div className="flex justify-between items-center mt-6">
+          {/* Left side - Change Password */}
+          <button
+            onClick={() => (window.location.href = "/change-password")}
+            className="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700"
+          >
+            Change Password
+          </button>
 
-        <div className="flex justify-end gap-3 mt-6">
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-gray-400 text-white px-4 py-2 rounded-lg"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={loading}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg"
-          >
-            {loading ? "Saving..." : "Save Changes"}
-          </button>
+          {/* Right side - Cancel and Save */}
+          <div className="flex gap-3">
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-gray-400 text-white px-4 py-2 rounded-lg"
+            >
+              Cancel
+            </button>
+
+            <button
+              onClick={handleSave}
+              disabled={loading}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+            >
+              {loading ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

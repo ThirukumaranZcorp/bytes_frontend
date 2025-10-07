@@ -682,6 +682,7 @@ export default function Dashboard() {
       const data = await response.json();
       console.log("------------Fetched user details:-----------", data.transactions);
       setTransactions(data.transactions || []);
+
       setCurrency(data.currency || "USD");
       setCapital(data.contribution_amount || "");
       setInitialAmount(data.contribution_amount || "");
@@ -859,34 +860,52 @@ export default function Dashboard() {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-sm md:text-base">
                 <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border p-2">Month</th>
-                    {/* <th className="border p-2">Profit Share</th> */}
-                    <th className="border p-2">Date</th>
-                    <th className="border p-2">Confirmation Number</th>
-                    <th className="border p-2">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.map((txn, i) => (
+                <tr className="bg-gray-100">
+                  <th className="border p-2">Month</th>
+                  <th className="border p-2">Date</th>
+                  <th className="border p-2">Bank Name</th>
+                  {/* <th className="border p-2">Fee</th> */}
+                  <th className="border p-2">Total Amount</th>
+                  <th className="border p-2">From Account</th>
+                  <th className="border p-2">To Account</th>
+                  <th className="border p-2">Confirmation Number</th>
+                  {/* <th className="border p-2">Service</th> */}
+                  <th className="border p-2">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 12 }, (_, i) => {
+                  const txn = transactions[i]; // get transaction if exists
+                  return (
                     <tr key={i} className="text-center">
                       <td className="border p-2">{i + 1}</td>
-                      {/* <td className="border p-2">
-                        {formatCurrency((results ? results.net : 0) / 12)}
-                      </td> */}
-                      {/* <td className="border p-2">{txn.notes}</td> */}
-                      <td className="border p-2">{txn.month}</td>
-                      <td className="border p-2">{txn.confirmation_number}</td>
+                      <td className="border p-2">{txn ? txn.month : ""}</td>
+                      <td className="border p-2">{txn ? txn.bank : ""}</td>
+                      <td className="border p-2">
+                        {txn ? formatCurrency(txn.total, txn.currency) : ""}
+                      </td>
+                      <td className="border p-2 whitespace-nowrap w-40">
+                        {txn ? txn.notes : ""}
+                      </td>
+                      <td className="border p-2">{txn ? txn.to_account : ""}</td>
+                      <td className="border p-2">{txn ? txn.confirmation_number : ""}</td>
                       <td
                         className={`border p-2 font-bold ${
-                          txn.status === "Completed" ? "text-green-600" : "text-red-600"
+                          txn
+                            ? txn.status === "Completed"
+                              ? "text-green-600"
+                              : "text-red-600"
+                            : "text-gray-400"
                         }`}
                       >
-                        {txn.status}
+                        {txn ? txn.status : "Pending"}
                       </td>
                     </tr>
-                  ))}
-                </tbody>
+                  );
+                })}
+              </tbody>
+
+
               </table>
             </div>
           </div>
