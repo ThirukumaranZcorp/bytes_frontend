@@ -577,7 +577,9 @@ const currencyOptions = [
   { code: "CNY", label: "CNY (¥)" },
   { code: "NZD", label: "NZD (NZ$)" },
   { code: "SGD", label: "SGD (S$)" },
+  { code: "PHP", label: "PHP (₱)" }, 
 ];
+
 
 export default function Dashboard() {
   const [currency, setCurrency] = useState("USD");

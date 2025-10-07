@@ -515,7 +515,7 @@ export default function ProfileSettings() {
               disabled
             />
           </div>
-          <div>
+          {/* <div>
             <label className="block font-semibold">Change passowrd</label>
             <input
               type="password"
@@ -524,7 +524,7 @@ export default function ProfileSettings() {
               onChange={handleChange}
               className="w-full border p-2 rounded-lg"
             />
-          </div>
+          </div> */}
         </div>
 
         <div className="flex justify-end gap-3 mt-6">
