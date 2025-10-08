@@ -313,32 +313,125 @@ export default function SignUpWithDetails() {
     setStep(step - 1);
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (formData.password !== formData.password_confirmation) {
+  //     alert("Passwords do not match!");
+  //     return;
+  //   }
+
+  //   if (formData.fullName === '' || formData.email === '' || formData.password === '' || formData.password_confirmation === '' || formData.contribution_amount === '') {
+  //     alert("please fill all the fields");
+  //     return;
+  //   }
+  //   if (formData.bank_name_or_crypto_type === '' || formData.account_number_or_wallet === '') {
+  //     alert("Please fill in all required banking/crypto fields.");
+  //     return;
+  //   }
+  //   if (!formData.terms_accepted || !formData.risk_disclosure_accepted || !formData.renewal_fee_accepted) {
+  //     alert("You must accept all terms and conditions to proceed.");
+  //     return;
+  //   }
+  //   if (!formData.typed_name || !formData.date_signed) {
+  //     alert("Please complete the signature section.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post(`${Api}/users`, {
+  //       sign_up: formData,
+  //     });
+
+  //     const userId = response.data.user.id;
+
+  //     alert("Signup successful, certificate will be downloaded!");
+
+  //     // Fetch PDF as blob
+  //     const pdfResponse = await axios.get(
+  //       `${Api}/api/v1/certificate/${userId}.pdf`,
+  //       { responseType: "blob" }
+  //     );
+
+  //     // Create a blob link to download
+  //     const url = window.URL.createObjectURL(new Blob([pdfResponse.data]));
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.setAttribute("download", "certificate.pdf"); // custom filename
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     link.remove();
+  //     window.location.href = "/";
+
+  //     setStep(1);
+  //   } catch (error) {
+  //     console.error("Signup failed:", error.response?.data || error);
+      
+  //     if (error.response?.data?.errors) {
+  //       alert(error.response.data.errors.join(", ")); 
+  //     } else {
+  //       alert("Signup failed. Please try again.");
+  //     }
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.password_confirmation) {
       alert("Passwords do not match!");
       return;
     }
+
+    if (
+      formData.fullName === '' ||
+      formData.email === '' ||
+      formData.password === '' ||
+      formData.password_confirmation === '' ||
+      formData.contribution_amount === ''
+    ) {
+      alert("Please fill all the fields");
+      return;
+    }
+
+    if (
+      formData.bank_name_or_crypto_type === '' ||
+      formData.account_number_or_wallet === ''
+    ) {
+      alert("Please fill in all required banking/crypto fields.");
+      return;
+    }
+
+    if (
+      !formData.terms_accepted ||
+      !formData.risk_disclosure_accepted ||
+      !formData.renewal_fee_accepted
+    ) {
+      alert("You must accept all terms and conditions to proceed.");
+      return;
+    }
+
+    if (!formData.typed_name || !formData.date_signed) {
+      alert("Please complete the signature section.");
+      return;
+    }
+
     try {
       const response = await axios.post(`${Api}/users`, {
         sign_up: formData,
       });
 
       const userId = response.data.user.id;
-
       alert("Signup successful, certificate will be downloaded!");
 
-      // Fetch PDF as blob
       const pdfResponse = await axios.get(
         `${Api}/api/v1/certificate/${userId}.pdf`,
         { responseType: "blob" }
       );
 
-      // Create a blob link to download
       const url = window.URL.createObjectURL(new Blob([pdfResponse.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "certificate.pdf"); // custom filename
+      link.setAttribute("download", "certificate.pdf");
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -347,14 +440,14 @@ export default function SignUpWithDetails() {
       setStep(1);
     } catch (error) {
       console.error("Signup failed:", error.response?.data || error);
-      
       if (error.response?.data?.errors) {
-        alert(error.response.data.errors.join(", ")); 
+        alert(error.response.data.errors.join(", "));
       } else {
         alert("Signup failed. Please try again.");
       }
     }
   };
+
 
 
   return (
@@ -614,7 +707,7 @@ export default function SignUpWithDetails() {
                   value={formData.account_name} onChange={handleChange}
                   // className="w-full border rounded-lg px-3 py-2" 
                   className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
+                  required
                   />
 
 
@@ -646,7 +739,7 @@ export default function SignUpWithDetails() {
                   value={formData.swift_or_protocol} onChange={handleChange}
                   // className="w-full border rounded-lg px-3 py-2" 
                   className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
+                  required
                   />
               </>
             )}
