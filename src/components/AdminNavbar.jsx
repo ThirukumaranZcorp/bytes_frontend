@@ -3,6 +3,7 @@ import logo from "../assets/logo2.jpg";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Link } from "react-router-dom";
 import CreateNotification from "./CreateNotification";
+import NotificationBell from "./NotificationBell";
 
 export default function AdminNavbar() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -24,8 +25,15 @@ export default function AdminNavbar() {
               />
             </a>
 
+
+
             
 
+          </div>
+
+          {/* Navigation Links */}
+          <div className="hidden md:flex space-x-8">
+            <NotificationBell />
           </div>
         </div>
       </div>

@@ -87,6 +87,7 @@ import Navbar from "./Navbar";
 import Api from "../api/ApiIP";
 import AdminNavbar from "./AdminNavbar"
 import CreateNotification from "./CreateNotification";
+import UpdatePayoutDay from "./UpdatePayoutDay";
 
 export default function AdminDashboard() {
   const [userDetails, setUserDetails] = useState([]);
@@ -95,6 +96,9 @@ export default function AdminDashboard() {
   const Token = sessionStorage.getItem("authToken");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const togglePopup = () => setIsPopupOpen(!isPopupOpen);
+
+  const [isPopupOpen2, setIsPopupOpen2] = useState(false);
+  const togglePopup2 = () => setIsPopupOpen2(!isPopupOpen2);
 
   // Fetch users
   const fetchData = async () => {
@@ -179,11 +183,6 @@ export default function AdminDashboard() {
     }
   };
 
-  useEffect(() => {
-    if(expandedUserId){
-    fetchTransactions();
-    }
-  }, [expandedUserId]);
 
 
   const handleTransactionUpload = async () => {
@@ -205,6 +204,12 @@ export default function AdminDashboard() {
       console.error("Upload error:", error);
     }
   };
+
+  useEffect(() => {
+    if (userDetails.length > 0 ) {
+      fetchData();
+    }
+  }, [isPopupOpen2]);
 
 
 
@@ -267,13 +272,39 @@ export default function AdminDashboard() {
                                     <i className="fas fa-bell text-2xl"></i>
                                   </button>
                                 </div>
+                                {/* <div className="mb-4">
+                                  <p><strong>Name:</strong> {user.name}</p>
+                                  <p><strong>Currency:</strong> {user.currency}</p>
+                                  <p><strong>Contribution:</strong> {user.contribution_amount}</p>
+                                  <p><strong>Start Date:</strong> {user.start_date}</p>
+                                  <p><strong>Email:</strong> {user.email}</p>
+                                  <p><strong>PayoutDate:</strong> {user.payout_day}</p>
+                                  <p className="text-yellow-800 text-sm">Every payout date will be create remender nodification</p>
+                                  <button
+                                    className="mt-2 bg-blue-600 text-white px-3 py-2 rounded"
+                                    onClick={togglePopup2}
+                                  >Change payout Date</button>
+
+                                </div> */}
+
                                 <div className="mb-4">
                                   <p><strong>Name:</strong> {user.name}</p>
                                   <p><strong>Currency:</strong> {user.currency}</p>
                                   <p><strong>Contribution:</strong> {user.contribution_amount}</p>
                                   <p><strong>Start Date:</strong> {user.start_date}</p>
                                   <p><strong>Email:</strong> {user.email}</p>
+                                  <p><strong>Payout Date:</strong> {user.payout_day}</p>
+                                  <p className="text-yellow-800 text-sm">
+                                    A reminder notification will be created two days before the payout date every month.
+                                  </p>
+                                  <button
+                                    className="mt-2 bg-blue-600 text-white px-3 py-2 rounded"
+                                    onClick={togglePopup2}
+                                  >
+                                    Change Payout Date
+                                  </button>
                                 </div>
+
                               </div>
 
                               
@@ -325,6 +356,7 @@ export default function AdminDashboard() {
                                   </tbody>
                                 </table>
                               </div>
+                              
                             </div>
 
                           </td>
@@ -342,6 +374,9 @@ export default function AdminDashboard() {
               </tbody>
             </table>
           </div>
+
+            
+          
         </div>
       </div>
       {/* Popup */}
@@ -356,6 +391,25 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
+      {isPopupOpen2 && (
+          <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex justify-center items-center z-50 animate-fadeIn">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative p-6 mx-4">
+              {/* Close button */}
+              <button
+                onClick={togglePopup2}
+                className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition"
+              >
+                <i className="fas fa-times text-xl"></i>
+              </button>
+
+              {/* UpdatePayoutDay Form */}
+              <UpdatePayoutDay userId={expandedUserId} />
+            </div>
+          </div>
+      )}
+
+
     </>
   );
 }
