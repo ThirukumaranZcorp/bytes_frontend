@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import logo from "../assets/logo2.jpg";
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CreateNotification from "./CreateNotification";
 import NotificationBell from "./NotificationBell";
+import { Settings2 } from 'lucide-react';
 
 export default function AdminNavbar() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const togglePopup = () => setIsPopupOpen(!isPopupOpen);
-
+  const navigate = useNavigate();
 
   return (
     <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
@@ -32,9 +33,16 @@ export default function AdminNavbar() {
           </div>
 
           {/* Navigation Links */}
-          <div className="hidden md:flex space-x-8">
-            <NotificationBell />
-          </div>
+        <div className="hidden md:flex items-center justify-center space-x-8 text-center">
+          <NotificationBell />
+          <Settings2
+            className="w-6 h-6 text-gray-800 cursor-pointer"
+            onClick={() => navigate("/settings")}
+          />
+        </div>
+
+          
+
         </div>
       </div>
 

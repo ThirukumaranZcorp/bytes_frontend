@@ -142,6 +142,8 @@ import ProfileSettings from "./components/ProfileSettings";
 import ChangePassword from "./components/ChangePassword";
 import CreateNotification from "./components/CreateNotification";
 
+import AdminSettings from "./components/AdminSettings";
+
 
 function App() {
   const token = sessionStorage.getItem("authToken");
@@ -205,6 +207,16 @@ function App() {
           }
         />
 
+
+
+        <Route
+          path="/settings"
+          element={
+            <PrivateRoute role="admin">
+              <AdminSettings />
+            </PrivateRoute>
+          }
+        />
 
 
         <Route
