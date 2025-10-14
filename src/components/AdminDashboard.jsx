@@ -126,6 +126,10 @@ export default function AdminDashboard() {
     fetchData();
   }, []);
 
+  useEffect(()=>{
+    fetchTransactions();
+  },[expandedUserId])
+
   // Toggle accordion
   const toggleExpand = (userId) => {
     setExpandedUserId(expandedUserId === userId ? null : userId);
@@ -164,7 +168,6 @@ export default function AdminDashboard() {
 
   // Fetch Transactions
   const fetchTransactions = async () => {
-    
     try {
       const response = await fetch(`${Api}/api/v1/transactions/${expandedUserId}`, {
         method: "GET",
@@ -183,6 +186,8 @@ export default function AdminDashboard() {
     }
   };
 
+
+  
 
 
   const handleTransactionUpload = async () => {

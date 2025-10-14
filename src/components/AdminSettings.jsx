@@ -32,7 +32,9 @@ const AdminSettings = () => {
 
             // ✅ Success popup
             // alert("✅ Fee updated successfully to " + data.fee + "%");
-            setValue(data.fee)
+            setValue(data.fee || 0)
+            setMIn(data.min || 0)
+            setMax(data.max || 0)
 
         } catch (error) {
             console.error("Error fetching data:", error);
