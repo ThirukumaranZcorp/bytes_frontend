@@ -322,7 +322,7 @@ export default function AdminDashboard() {
                                     onClick={handleTransactionUpload}
                                     className="bg-green-600 text-white px-4 py-2 rounded"
                                   >
-                                    Upload Transactions CSV
+                                    Upload Transactions
                                   </button>
                                 </div>
 
@@ -334,7 +334,7 @@ export default function AdminDashboard() {
                                       <th className="border p-2">Date</th>
                                       <th className="border p-2">From Account</th>
                                       <th className="border p-2">To Account</th>
-                                      <th className="border p-2">Amount</th>
+                                      <th className="border p-2">Profit Amount</th>
                                       <th className="border p-2">Status</th>
                                     </tr>
                                   </thead>
@@ -342,12 +342,12 @@ export default function AdminDashboard() {
                                     {transactions.length > 0 ? (
                                       transactions.map((t, idx) => (
                                         <tr key={idx} className="text-center">
-                                          <td className="border p-2">{t.month}</td>
+                                          <td className="border p-2">{t.month_count}</td>
                                           <td className="border p-2">{t.confirmation_number}</td>
-                                          <td className="border p-2">{t.transaction_date}</td>
+                                          <td className="border p-2">{t.month}</td>
                                           <td className="border p-2">{t.from_account}</td>
                                           <td className="border p-2">{t.to_account}</td>
-                                          <td className="border p-2">{t.amount}</td>
+                                          <td className="border p-2">{t.profit_amount}</td>
                                           <td className="border p-2">{t.status}</td>
                                         </tr>
                                       ))

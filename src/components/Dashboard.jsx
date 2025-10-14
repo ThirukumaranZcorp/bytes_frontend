@@ -420,21 +420,21 @@ export default function Dashboard() {
                   const txn = transactions[i]; // get transaction if exists
                   return (
                     <tr key={i} className="text-center">
-                      <td className="border p-2">{i + 1}</td>
+                      <td className="border p-2">{i + 1} </td>
                       <td className="border p-2">{txn ? txn.month : ""}</td>
                       <td className="border p-2">{txn ? txn.bank : ""}</td>
                       <td className="border p-2">
                         {txn ? formatCurrency(txn.total, txn.currency) : ""}
                       </td>
                       <td className="border p-2 whitespace-nowrap w-40">
-                        {txn ? txn.notes : ""}
+                        {txn ? txn.from_account : ""}
                       </td>
                       <td className="border p-2">{txn ? txn.to_account : ""}</td>
                       <td className="border p-2">{txn ? txn.confirmation_number : ""}</td>
                       <td
                         className={`border p-2 font-bold ${
                           txn
-                            ? txn.status === "Completed"
+                            ? txn.status === "PAID"
                               ? "text-green-600"
                               : "text-red-600"
                             : "text-gray-400"
