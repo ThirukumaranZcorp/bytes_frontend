@@ -25,15 +25,10 @@ export default function AdminNavbar() {
                 className="h-30 w-30"
               />
             </a>
-
-
-
-            
-
           </div>
 
           {/* Navigation Links */}
-        <div className="hidden md:flex items-center justify-center space-x-8 text-center">
+        <div className="flex items-center justify-center space-x-8 text-center">
           <NotificationBell />
           <Settings2
             className="w-6 h-6 text-gray-800 cursor-pointer"
@@ -41,14 +36,8 @@ export default function AdminNavbar() {
           />
         </div>
 
-          
-
         </div>
       </div>
-
-      
-
-
     </nav>
   );
 }

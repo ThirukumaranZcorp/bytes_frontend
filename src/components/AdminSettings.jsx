@@ -6,6 +6,8 @@ import Api from "../api/ApiIP";
 
 const AdminSettings = () => {
   const [value, setValue] = useState(3);
+  const [min , setMIn] = useState(4);
+  const [max , setMax] = useState(5);
   const navigate = useNavigate(); // ✅ initialize navigate
   const Token = sessionStorage.getItem("authToken");
 
@@ -70,6 +72,67 @@ const AdminSettings = () => {
             alert("Something went wrong while fetching data.");
         }
     };
+
+    const handleChangemin = async () => {
+      try {
+            const response = await fetch(`${Api}/api/v1/change_trader_min`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Bearer ${Token}`,
+            },
+            body: JSON.stringify({ min: min }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+            console.error("Saving failed:", data);
+            alert("Saving failed: " + (data.error || "Unknown error"));
+            return;
+            }
+
+            // ✅ Success popup
+            alert("✅ Fee updated successfully to " + data.min + "%");
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            alert("Something went wrong while fetching data.");
+        }
+
+    }
+
+
+    const handleChangemax = async () => {
+      try {
+            const response = await fetch(`${Api}/api/v1/change_trader_max`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Bearer ${Token}`,
+            },
+            body: JSON.stringify({ max: max }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+            console.error("Saving failed:", data);
+            alert("Saving failed: " + (data.error || "Unknown error"));
+            return;
+            }
+
+            // ✅ Success popup
+            alert("✅ Fee updated successfully to " + data.max + "%");
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            alert("Something went wrong while fetching data.");
+        }
+
+    }
 
 
 
@@ -167,6 +230,129 @@ const AdminSettings = () => {
                 Save
               </button>
             </div>
+
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Computed Tier & Results
+            </h2>
+
+            <div className="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+              {/* Text Section */}
+              <div className="text-center md:text-left">
+                <h3 className="text-lg font-medium text-gray-900">
+                  Min (%)
+                </h3>
+              </div>
+
+              {/* Range Input */}
+              <div className="flex flex-col items-center md:items-start space-y-3">
+                <label
+                  htmlFor="percentage"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Percentage:{" "}
+                  <span className="font-semibold text-blue-600">{min}%</span>
+                </label>
+
+                <input
+                  id="percentage"
+                  type="range"
+                  min="2"
+                  max="6"
+                  step="1"
+                  value={min}
+                  onChange={(e) => setMIn(e.target.value)}
+                  className="
+                    w-64 h-2 appearance-none rounded-full cursor-pointer
+                    bg-gradient-to-r from-blue-400 via-indigo-500 to-blue-600
+                    transition-all duration-300
+                    [&::-webkit-slider-thumb]:appearance-none 
+                    [&::-webkit-slider-thumb]:w-5 
+                    [&::-webkit-slider-thumb]:h-5 
+                    [&::-webkit-slider-thumb]:bg-white 
+                    [&::-webkit-slider-thumb]:border 
+                    [&::-webkit-slider-thumb]:border-gray-300 
+                    [&::-webkit-slider-thumb]:rounded-full
+                    [&::-webkit-slider-thumb]:shadow-md 
+                    [&::-webkit-slider-thumb]:cursor-pointer
+                    [&::-webkit-slider-thumb]:transition-all
+                    [&::-webkit-slider-thumb]:hover:scale-110
+                  "
+                />
+              </div>
+
+              {/* Save Button */}
+              <button
+                onClick={handleChangemin}
+                className="
+                  bg-blue-600 hover:bg-blue-700 
+                  text-white font-medium px-5 py-2.5 rounded-lg
+                  shadow-md transition-all duration-300
+                  hover:shadow-lg hover:scale-105
+                "
+              >
+                Save
+              </button>
+            </div>
+
+            <div className="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+              {/* Text Section */}
+              <div className="text-center md:text-left">
+                <h3 className="text-lg font-medium text-gray-900">
+                  Max (%)
+                </h3>
+              </div>
+
+              {/* Range Input */}
+              <div className="flex flex-col items-center md:items-start space-y-3">
+                <label
+                  htmlFor="percentage"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Percentage:{" "}
+                  <span className="font-semibold text-blue-600">{max}%</span>
+                </label>
+
+                <input
+                  id="percentage"
+                  type="range"
+                  min="3"
+                  max="10"
+                  step="1"
+                  value={max}
+                  onChange={(e) => setMax(e.target.value)}
+                  className="
+                    w-64 h-2 appearance-none rounded-full cursor-pointer
+                    bg-gradient-to-r from-blue-400 via-indigo-500 to-blue-600
+                    transition-all duration-300
+                    [&::-webkit-slider-thumb]:appearance-none 
+                    [&::-webkit-slider-thumb]:w-5 
+                    [&::-webkit-slider-thumb]:h-5 
+                    [&::-webkit-slider-thumb]:bg-white 
+                    [&::-webkit-slider-thumb]:border 
+                    [&::-webkit-slider-thumb]:border-gray-300 
+                    [&::-webkit-slider-thumb]:rounded-full
+                    [&::-webkit-slider-thumb]:shadow-md 
+                    [&::-webkit-slider-thumb]:cursor-pointer
+                    [&::-webkit-slider-thumb]:transition-all
+                    [&::-webkit-slider-thumb]:hover:scale-110
+                  "
+                />
+              </div>
+
+              {/* Save Button */}
+              <button
+                onClick={handleChangemax}
+                className="
+                  bg-blue-600 hover:bg-blue-700 
+                  text-white font-medium px-5 py-2.5 rounded-lg
+                  shadow-md transition-all duration-300
+                  hover:shadow-lg hover:scale-105
+                "
+              >
+                Save
+              </button>
+            </div>
+
           </div>
         </div>
       </div>

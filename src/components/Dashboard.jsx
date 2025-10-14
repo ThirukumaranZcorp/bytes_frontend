@@ -36,6 +36,11 @@ export default function Dashboard() {
   const [capital, setCapital] = useState("");
   const [accounts, setAccounts] = useState(1);
   const [fee, setFee] = useState(3);
+
+  const [min , setMin] = useState(0);
+  const [max , setMax] = useState(0)
+
+
   const [initialAmount, setInitialAmount] = useState("");
   const [results, setResults] = useState(null);
   const Token = sessionStorage.getItem("authToken");
@@ -80,8 +85,13 @@ export default function Dashboard() {
     }
 
     // Base % from Excel
-    let minPct = 4.0,
-      maxPct = 8.0;
+    // let minPct = 4.0,
+    //   maxPct = 8.0;
+
+
+    let minPct = min || 0;
+    let maxPct = max || 0;
+
 
     // Apply anti-split penalty (Excel logic: 1% per extra account)
     let penalty = (accounts - 1) * penaltyRate / 100;
@@ -171,6 +181,9 @@ export default function Dashboard() {
         // ✅ Success popup
         // alert("✅ Fee updated successfully to " + data.fee + "%");
         setFee(data.fee)
+        setMin(data.min)
+        setMax(data.max)
+
 
     } catch (error) {
         console.error("Error fetching data:", error);
@@ -267,7 +280,7 @@ export default function Dashboard() {
 
 
             <label className="block font-semibold">Capital Amount</label>
-            <input
+            {/* <input
               type="number"
               placeholder="ENTER VALUE HERE"
               className="w-full border rounded-lg p-2 mb-3 border-red-500 placeholder:font-bold"
@@ -276,7 +289,26 @@ export default function Dashboard() {
               style={{
                 animation: "breathePlaceholder 1.5s ease-in-out infinite",
               }}
+            /> */}
+
+
+            <input
+              type="number"
+              placeholder="ENTER VALUE HERE"
+              className="w-full border rounded-lg p-2 mb-3 border-red-500 placeholder:font-bold"
+              value={capital}
+              onChange={(e) => {
+                const inputValue = parseFloat(e.target.value);
+                if (inputValue <= 100000000) {
+                  setCapital(inputValue);
+                }
+              }}
+              max={100000000}
+              style={{
+                animation: "breathePlaceholder 1.5s ease-in-out infinite",
+              }}
             />
+
 
             <style>
               {`
