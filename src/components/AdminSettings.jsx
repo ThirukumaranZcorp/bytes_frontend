@@ -96,7 +96,7 @@ const AdminSettings = () => {
             }
 
             // ✅ Success popup
-            alert("✅ Fee updated successfully to " + data.min + "%");
+            alert("✅ Min value updated successfully to " + data.min + "%");
 
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -127,7 +127,7 @@ const AdminSettings = () => {
             }
 
             // ✅ Success popup
-            alert("✅ Fee updated successfully to " + data.max + "%");
+            alert("✅ Max value updated successfully to " + data.max + "%");
 
         } catch (error) {
             console.error("Error fetching data:", error);

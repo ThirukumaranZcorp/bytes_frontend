@@ -428,13 +428,23 @@ export default function SignUpWithDetails() {
         { responseType: "blob" }
       );
 
+      const disposition = pdfResponse.headers["content-disposition"];
+      let filename = "certificate.pdf";
+      if (disposition && disposition.includes("filename=")) {
+        filename = disposition
+          .split("filename=")[1]
+          .replace(/["']/g, "")
+          .trim();
+      }
+
       const url = window.URL.createObjectURL(new Blob([pdfResponse.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "certificate.pdf");
+      link.setAttribute("download", filename);
       document.body.appendChild(link);
       link.click();
       link.remove();
+
       window.location.href = "/";
 
       setStep(1);
