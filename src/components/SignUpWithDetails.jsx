@@ -239,7 +239,7 @@ import axios from "axios";
 import logo from "../assets/logo3.png";
 import Api from "../api/ApiIP"
 import InvestmentChart from "./InvestmentChart";
-
+import SignaturePadComponent from './SignaturePadComponent';
 
 export default function SignUpWithDetails() {
   const [step, setStep] = useState(1);
@@ -250,6 +250,10 @@ export default function SignUpWithDetails() {
   endDateObj.setFullYear(endDateObj.getFullYear() + 1); // +1 year
   const endDate = endDateObj.toISOString().split("T")[0];
   const [showChart, setShowChart] = useState(false);
+  const [showSignaturePad, setShowSignaturePad] = useState(false);
+  const handleSignatureSave = (signatureImage) => {
+    setFormData((prev) => ({ ...prev, signature_image: signatureImage }));
+  };
 
 
   const [formData, setFormData] = useState({
@@ -273,6 +277,7 @@ export default function SignUpWithDetails() {
     risk_disclosure_accepted: false,
     renewal_fee_accepted: false,
     typed_name: "",
+    signature_image: "",
     date_signed: new Date().toISOString().split("T")[0],
   });
 
@@ -379,6 +384,11 @@ export default function SignUpWithDetails() {
 
     if (formData.password !== formData.password_confirmation) {
       alert("Passwords do not match!");
+      return;
+    }
+
+    if (!formData.signature_image) {
+      alert("Please sign the signature before submitting!");
       return;
     }
 
@@ -888,33 +898,67 @@ export default function SignUpWithDetails() {
 
 
             {/* STEP 5 */}
-            {step === 5 && (
+           {step === 5 && (
               <>
                 <label className="flex items-center space-x-3 mt-2">
-
-                  <span className="text-white text-md font-medium">
-                    Full name
-                  </span>
+                  <span className="text-white text-md font-medium">Full name</span>
                 </label>
 
-                <input type="text" name="typed_name" placeholder="Type your full name"
-                  value={formData.typed_name} onChange={handleChange}
-                  // className="w-full border rounded-lg px-3 py-2" 
-                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"                
-                  required />
-                <label className="flex items-center space-x-3 mt-2">
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="text"
+                    name="typed_name"
+                    placeholder="Type your full name"
+                    value={formData.typed_name}
+                    onChange={handleChange}
+                    className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
 
-                  <span className="text-white text-md font-medium">
-                    Date of Signing
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShowSignaturePad(true)}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  >
+                    Signature
+                  </button>
+                </div>
+
+                {showSignaturePad && (
+                  <SignaturePadComponent
+                    onSave={(signatureImage) => {
+                      handleSignatureSave(signatureImage);
+                    }}
+                    onClose={() => setShowSignaturePad(false)}
+                  />
+                )}
+
+                {formData.signature_image && (
+                  <img
+                    src={formData.signature_image}
+                    alt="Signature"
+                    className="mt-3 border bg-gray-200 rounded w-40 h-auto"
+                  />
+                )}
+
+                <label className="flex items-center space-x-3 mt-4">
+                  <span className="text-white text-md font-medium">Date of Signing</span>
                 </label>
-                <input type="date" name="date_signed" value={formData.date_signed}
-                  onChange={handleChange} 
-                  // className="w-full border rounded-lg px-3 py-2" 
+
+                <input
+                  type="date"
+                  name="date_signed"
+                  value={formData.date_signed}
+                  onChange={handleChange}
                   className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required />
+                  required
+                />
+
+              
               </>
             )}
+
+
 
             {/* Navigation Buttons */}
             <div className="flex justify-between">
