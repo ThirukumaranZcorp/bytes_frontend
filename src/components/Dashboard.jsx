@@ -393,7 +393,6 @@ export default function Dashboard() {
 
 
         {/* ==== Fixed 12 Month Distribution Table ==== */}
-        {/* ==== Fixed 12 Month Distribution Table ==== */}
         {capital && (
           <div className="bg-white shadow-md rounded-xl p-3 md:p-6 max-w-5xl mx-auto mt-6">
             <h2 className="text-base md:text-lg font-bold border-b pb-2 mb-4">
@@ -402,56 +401,82 @@ export default function Dashboard() {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-sm md:text-base">
                 <thead>
-                <tr className="bg-gray-100">
-                  <th className="border p-2">Month</th>
-                  <th className="border p-2">Date</th>
-                  <th className="border p-2">Bank Name</th>
-                  {/* <th className="border p-2">Fee</th> */}
-                  <th className="border p-2">Total Amount</th>
-                  <th className="border p-2">From Account</th>
-                  <th className="border p-2">To Account</th>
-                  <th className="border p-2">Confirmation Number</th>
-                  {/* <th className="border p-2">Service</th> */}
-                  <th className="border p-2">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Array.from({ length: 12 }, (_, i) => {
-                  const txn = transactions[i]; // get transaction if exists
-                  return (
-                    <tr key={i} className="text-center">
-                      <td className="border p-2">{i + 1} </td>
-                      <td className="border p-2">{txn ? txn.month : ""}</td>
-                      <td className="border p-2">{txn ? txn.bank : ""}</td>
-                      <td className="border p-2">
-                        {txn ? formatCurrency(txn.total, txn.currency) : ""}
-                      </td>
-                      <td className="border p-2 whitespace-nowrap w-40">
-                        {txn ? txn.from_account : ""}
-                      </td>
-                      <td className="border p-2">{txn ? txn.to_account : ""}</td>
-                      <td className="border p-2">{txn ? txn.confirmation_number : ""}</td>
-                      <td
-                        className={`border p-2 font-bold ${
-                          txn
-                            ? txn.status === "PAID"
-                              ? "text-green-600"
+                  <tr className="bg-gray-100">
+                    <th className="border p-2">S no</th>
+                    <th className="border p-2">Month</th>
+                    {/* <th className="border p-2">Date</th> */}
+                    <th className="border p-2">Bank Name</th>
+                    <th className="border p-2">Total Amount</th>
+                    <th className="border p-2">Airdrop Amount</th>
+                    {/* <th className="border p-2">Service</th> */}
+                    <th className="border p-2">From Account</th>
+                    <th className="border p-2">To Account</th>
+                    <th className="border p-2">Confirmation Number</th>
+                    <th className="border p-2">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.from({ length: 12 }, (_, i) => {
+                    const txn = transactions[i];
+                    return (
+                      <tr key={i} className="text-center">
+                        {/* Always show S.No */}
+                        <td className="border p-2">{i + 1}</td>
+
+                        {/* Other columns show only if data exists */}
+                        <td className="border p-2">{txn ? txn.month : ""}</td>
+                        {/* <td className="border p-2">{txn ? txn.date : ""}</td> */}
+                        <td className="border p-2">{txn ? txn.bank : ""}</td>
+                        
+                        <td className="border p-2">
+                          {txn
+                            ? txn.total != null
+                              ? formatCurrency(txn.total, txn.currency)
+                              : ""
+                            : ""}
+                        </td>
+
+
+                        <td className="border p-2">
+                          {txn
+                            ? txn.airdrop_amount != null
+                              ? formatCurrency(txn.airdrop_amount, txn.currency)
+                              : ""
+                            : ""}
+                        </td>
+
+                        {/* <td className="border p-2 whitespace-nowrap w-40">
+                          {txn ? txn.service || "" : ""}
+                        </td> */}
+
+                        <td className="border p-2">
+                          {txn && txn.status ? txn.from_account || " " : ""}
+                        </td>
+
+                        <td className="border p-2">{txn ? txn.to_account : ""}</td>
+                        <td className="border p-2">{txn ? txn.confirmation_number : ""}</td>
+                        <td
+                          className={`border p-2 font-bold ${
+                            txn
+                              ? txn.status === "PAID"
+                                ? "text-green-600"
+                                : "text-red-600"
                               : "text-red-600"
-                            : "text-gray-400"
-                        }`}
-                      >
-                        {txn ? txn.status : "Pending"}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-
-
+                          }`}
+                        >
+                          {txn && txn.status ? txn.status : "Pending"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
               </table>
             </div>
           </div>
         )}
+
+
+
         </div>
     </>
   );

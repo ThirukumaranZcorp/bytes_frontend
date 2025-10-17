@@ -1,93 +1,10 @@
-// import React, { useState, useEffect } from "react";
-// import Navbar from "./Navbar";
-// import Api from "../api/ApiIP";
-
-// export default function AdminDashboard() {
-//   const [userDetails, setUserDetails] = useState([]);
-//   const Token = localStorage.getItem("authToken");
-
-//   const fetchData = async () => {
-//     try {
-//       const response = await fetch(`${Api}/api/v1/show_details`, {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Accept: "application/json",
-//           Authorization: `Bearer ${Token}`,
-//         },
-//       });
-
-//       if (!response.ok) {
-//         console.error("Failed response:", response);
-//         return;
-//       }
-
-//       const data = await response.json();
-//       setUserDetails(data);
-//     } catch (error) {
-//       console.error("Network error:", error);
-//       alert("Something went wrong. Please try again later.");
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-
-//   return (
-//     <>
-//       <Navbar />
-//       <div className="bg-[#b61825] pt-32 md:pt-40 px-3 md:px-6 py-10">
-//         <h1 className="text-4xl font-bold text-white mb-6 text-center">
-//           Admin Dashboard
-//         </h1>
-//         <div className="bg-white shadow-md rounded-xl p-6 max-w-5xl mx-auto">
-//           <h2 className="text-2xl font-semibold mb-4">User Management</h2>
-//           <p className="text-gray-700">
-//             This is where admin functionalities will be implemented.
-//           </p>
-
-//           <div className="overflow-x-auto">
-//             <table className="w-full border-collapse text-sm md:text-base">
-//               <thead>
-//                 <tr className="bg-gray-100">
-//                   <th className="border p-2">Name</th>
-//                   <th className="border p-2">Currency</th>
-//                   <th className="border p-2">Contribution Amount</th>
-//                   <th className="border p-2">Start Date</th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {userDetails.length > 0 ? (
-//                   userDetails.map((t, idx) => (
-//                     <tr key={idx} className="text-center">
-//                       <td className="border p-2">{t.name}</td>
-//                       <td className="border p-2">{t.currency}</td>
-//                       <td className="border p-2 font-bold">{t.contribution_amount}</td>
-//                       <td className="border p-2 font-bold">{t.start_date}</td>
-//                     </tr>
-//                   ))
-//                 ) : (
-//                   <tr>
-//                     <td colSpan="4" className="border p-2 text-center text-gray-500">
-//                       No data available
-//                     </td>
-//                   </tr>
-//                 )}
-//               </tbody>
-//             </table>
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Api from "../api/ApiIP";
 import AdminNavbar from "./AdminNavbar"
 import CreateNotification from "./CreateNotification";
 import UpdatePayoutDay from "./UpdatePayoutDay";
+import ChangeContributionAmount from "./ChangeContributionAmount"
 
 export default function AdminDashboard() {
   const [userDetails, setUserDetails] = useState([]);
@@ -99,6 +16,9 @@ export default function AdminDashboard() {
 
   const [isPopupOpen2, setIsPopupOpen2] = useState(false);
   const togglePopup2 = () => setIsPopupOpen2(!isPopupOpen2);
+
+  const [isPopupOpen3, setIsPopupOpen3] = useState(false);
+  const togglePopup3 = () => setIsPopupOpen3(!isPopupOpen3);
 
   // Fetch users
   const fetchData = async () => {
@@ -124,7 +44,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [isPopupOpen3]);
 
   useEffect(()=>{
     fetchTransactions();
@@ -302,12 +222,20 @@ export default function AdminDashboard() {
                                   <p className="text-yellow-800 text-sm">
                                     A reminder notification will be created two days before the payout date every month.
                                   </p>
-                                  <button
-                                    className="mt-2 bg-blue-600 text-white px-3 py-2 rounded"
-                                    onClick={togglePopup2}
-                                  >
-                                    Change Payout Date
-                                  </button>
+                                  <div className="flex gap-5">
+                                    <button
+                                      className="mt-2 bg-blue-600 text-white px-3 py-2 rounded"
+                                      onClick={togglePopup2}
+                                    >
+                                      Change Payout Date
+                                    </button>
+                                    <button
+                                      className="mt-2 bg-blue-600 text-white px-3 py-2 rounded"
+                                      onClick={togglePopup3}
+                                    >
+                                      Change Contribution Amount
+                                    </button>
+                                  </div>
                                 </div>
 
                               </div>
@@ -335,6 +263,7 @@ export default function AdminDashboard() {
                                       <th className="border p-2">From Account</th>
                                       <th className="border p-2">To Account</th>
                                       <th className="border p-2">Profit Amount</th>
+                                      <th className="border p-2">Airdrop Amount</th>
                                       <th className="border p-2">Status</th>
                                     </tr>
                                   </thead>
@@ -345,9 +274,10 @@ export default function AdminDashboard() {
                                           <td className="border p-2">{t.month_count}</td>
                                           <td className="border p-2">{t.confirmation_number}</td>
                                           <td className="border p-2">{t.month}</td>
-                                          <td className="border p-2">{t.from_account}</td>
+                                          <td className="border p-2">{t.status ? t.from_account : ''}</td>
                                           <td className="border p-2">{t.to_account}</td>
                                           <td className="border p-2">{t.profit_amount}</td>
+                                          <td className="border p-2">{t.airdrop_amount}</td>
                                           <td className="border p-2">{t.status}</td>
                                         </tr>
                                       ))
@@ -398,7 +328,7 @@ export default function AdminDashboard() {
       )}
 
       {isPopupOpen2 && (
-          <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex justify-center items-center z-50 animate-fadeIn">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-50 animate-fadeIn">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative p-6 mx-4">
               {/* Close button */}
               <button
@@ -410,6 +340,23 @@ export default function AdminDashboard() {
 
               {/* UpdatePayoutDay Form */}
               <UpdatePayoutDay userId={expandedUserId} />
+            </div>
+          </div>
+      )}
+
+      {isPopupOpen3 && (
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-50 animate-fadeIn">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative p-6 mx-4">
+              {/* Close button */}
+              <button
+                onClick={togglePopup3}
+                className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition"
+              >
+                <i className="fas fa-times text-xl"></i>
+              </button>
+
+              {/* UpdatePayoutDay Form */}
+              <ChangeContributionAmount userId={expandedUserId} />
             </div>
           </div>
       )}
