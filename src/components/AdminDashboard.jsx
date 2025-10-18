@@ -19,6 +19,7 @@ export default function AdminDashboard() {
 
   const [isPopupOpen3, setIsPopupOpen3] = useState(false);
   const togglePopup3 = () => setIsPopupOpen3(!isPopupOpen3);
+  const [currency, setCurrency] = useState("PHP");
 
   // Fetch users
   const fetchData = async () => {
@@ -51,8 +52,10 @@ export default function AdminDashboard() {
   },[expandedUserId])
 
   // Toggle accordion
-  const toggleExpand = (userId) => {
+  const toggleExpand = (userId , currency) => {
     setExpandedUserId(expandedUserId === userId ? null : userId);
+    setCurrency(currency)
+
     setFile(null); // Reset file when switching users
   };
 
@@ -137,6 +140,15 @@ export default function AdminDashboard() {
   }, [isPopupOpen2]);
 
 
+  function formatCurrency(value) {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: currency,
+      minimumFractionDigits: 2,
+    }).format(value);
+  }
+
+
 
 
   return (
@@ -167,7 +179,7 @@ export default function AdminDashboard() {
                     <React.Fragment key={user.id}>
                       <tr
                         className="text-center cursor-pointer hover:bg-gray-50"
-                        onClick={() => toggleExpand(user.id)}
+                        onClick={() => toggleExpand(user.id , user.currency)}
                       >
                         <td className="border p-2">{user.name}</td>
                         
@@ -254,7 +266,7 @@ export default function AdminDashboard() {
                                   </button>
                                 </div>
 
-                                <table className="w-full border-collapse text-sm md:text-base">
+                                {/* <table className="w-full border-collapse text-sm md:text-base">
                                   <thead>
                                     <tr className="bg-gray-100">
                                       <th className="border p-2">Month</th>
@@ -288,6 +300,96 @@ export default function AdminDashboard() {
                                         </td>
                                       </tr>
                                     )}
+                                  </tbody>
+                                </table> */}
+
+
+                                <table className="w-full border-collapse text-sm md:text-base">
+                                  <thead>
+                                    <tr className="bg-gray-100">
+                                      <th className="border p-2">S no</th>
+                                      <th className="border p-2">Month</th>
+                                      {/* <th className="border p-2">Date</th> */}
+                                      <th className="border p-2">Bank Name</th>
+                                      <th className="border p-2">Profit Amount</th>
+                                      <th className="border p-2">Airdrop Amount</th>
+                                      {/* <th className="border p-2">Service</th> */}
+                                      <th className="border p-2">From Account</th>
+                                      <th className="border p-2">To Account</th>
+                                      <th className="border p-2">Confirmation Number</th>
+                                      <th className="border p-2">Status</th>
+                                    </tr>
+                                  </thead>
+
+                                  <tbody>
+                                    {Array.from({ length: 12 }, (_, i) => {
+                                      const txn = transactions[i];
+                                      return (
+                                        <tr key={i} className="text-center">
+                                          {/* Always show S.No */}
+                                          <td className="border p-2">{i + 1}</td>
+
+                                          {/* Other columns show only if data exists */}
+                                          <td className="border p-2">{txn ? txn.month : ""}</td>
+                                          {/* <td className="border p-2">{txn ? txn.date : ""}</td> */}
+                                          <td className="border p-2">{txn ? txn.bank : ""}</td>
+
+                                          {/* ✅ Fixed Total Amount */}
+                                          <td className="border p-2">
+                                            {txn && txn.total != null ? (
+                                              <span
+                                                className={`whitespace-nowrap font-semibold ${
+                                                  txn.total > 0 ? "text-green-600" : "text-red-600"
+                                                }`}
+                                              >
+                                                {txn.total > 0
+                                                  ? `+ ${formatCurrency(txn.profit_amount, user.currency)}`
+                                                  : formatCurrency(txn.profit_amount, user.currency)}
+                                              </span>
+                                            ) : (
+                                              ""
+                                            )}
+                                          </td>
+
+                                          {/* ✅ Fixed Airdrop Amount */}
+                                          <td className="border p-2">
+                                            {txn && txn.airdrop_amount != null ? (
+                                              <span
+                                                className={`whitespace-nowrap font-semibold ${
+                                                  txn.airdrop_amount > 0 ? "text-green-600" : "text-red-600"
+                                                }`}
+                                              >
+                                                {txn.airdrop_amount > 0
+                                                  ? `+ ${formatCurrency(txn.airdrop_amount, user.currency)}`
+                                                  : formatCurrency(txn.airdrop_amount, user.currency)}
+                                              </span>
+                                            ) : (
+                                              ""
+                                            )}
+                                          </td>
+
+                                          <td className="border p-2">
+                                            {txn && txn.status ? txn.from_account || " " : ""}
+                                          </td>
+
+                                          <td className="border p-2">{txn ? txn.to_account : ""}</td>
+                                          <td className="border p-2">{txn ? txn.confirmation_number : ""}</td>
+
+                                          {/* ✅ Status */}
+                                          <td
+                                            className={`border p-2 font-bold ${
+                                              txn
+                                                ? txn.status === "PAID"
+                                                  ? "text-green-600"
+                                                  : "text-red-600"
+                                                : "text-red-600"
+                                            }`}
+                                          >
+                                            {txn && txn.status ? txn.status : "Pending"}
+                                          </td>
+                                        </tr>
+                                      );
+                                    })}
                                   </tbody>
                                 </table>
                               </div>

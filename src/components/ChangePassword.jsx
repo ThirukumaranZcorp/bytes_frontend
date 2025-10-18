@@ -8,40 +8,76 @@ export default function ChangePassword() {
   const [message, setMessage] = useState("");
   const Token = sessionStorage.getItem("authToken");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
 
-    if (newPassword !== confirmPassword) {
-        setMessage("New passwords do not match");
-        return;
-    }
+//     if (newPassword !== confirmPassword) {
+//         setMessage("New passwords do not match");
+//         return;
+//     }
 
-    try {
-        const response = await fetch(`${Api}/users/change_password`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${Token}`,
-        },
-        body: JSON.stringify({
-            current_password: currentPassword,
-            new_password: newPassword,
-        }),
-        });
+//     try {
+//         const response = await fetch(`${Api}/users/change_password`, {
+//         method: "PATCH",
+//         headers: {
+//             "Content-Type": "application/json",
+//             Accept: "application/json",
+//             Authorization: `Bearer ${Token}`,
+//         },
+//         body: JSON.stringify({
+//             current_password: currentPassword,
+//             new_password: newPassword,
+//         }),
+//         });
 
-        const data = await response.json();
+//         const data = await response.json();
 
-        if (!response.ok) {
-        // If server returned an error
-        throw new Error(data.error || "Something went wrong");
+//         if (!response.ok) {
+//         // If server returned an error
+//         throw new Error(data.error || "Something went wrong");
+//         }
+
+//         // Success
+//         setMessage(data.message);
+//     } catch (err) {
+//         setMessage(err.message || "Something went wrong");
+//     }
+//     };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (newPassword !== confirmPassword) {
+            setMessage("New passwords do not match");
+            return;
         }
 
-        // Success
-        setMessage(data.message);
-    } catch (err) {
-        setMessage(err.message || "Something went wrong");
-    }
+        try {
+            const response = await fetch(`${Api}/users/change_password`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Bearer ${Token}`,
+            },
+            body: JSON.stringify({
+                current_password: currentPassword,
+                new_password: newPassword,
+            }),
+            });
+
+            const data = await response.json();
+            console.log("Response:", data);
+
+            if (!response.ok) {
+            setMessage(data.error || "Failed to change password");
+            return; // ⬅️ prevent showing success when it failed
+            }
+
+            setMessage(data.message || "Password changed successfully");
+        } catch (err) {
+            setMessage(err.message || "Something went wrong");
+        }
     };
 
 

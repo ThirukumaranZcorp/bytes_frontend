@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Api from "../api/ApiIP";
 import CryptoChart from "./CryptoChart";
-
+import TawkTo from "./TawkTo";
 
 const tiers = [
   { name: "Starter", min: 1000, max: 2500, risk: "High", color: "#E63946" },
@@ -37,8 +37,8 @@ export default function Dashboard() {
   const [accounts, setAccounts] = useState(1);
   const [fee, setFee] = useState(3);
 
-  const [min , setMin] = useState(0);
-  const [max , setMax] = useState(0)
+  const [min , setMin] = useState(3);
+  const [max , setMax] = useState(5)
 
 
   const [initialAmount, setInitialAmount] = useState("");
@@ -180,11 +180,10 @@ export default function Dashboard() {
 
         // ✅ Success popup
         // alert("✅ Fee updated successfully to " + data.fee + "%");
-        setFee(data.fee)
-        setMin(data.min)
-        setMax(data.max)
-
-
+        setFee(data.fee || 3)
+        setMin(data.min || 3)
+        setMax(data.max || 5)
+        
     } catch (error) {
         console.error("Error fetching data:", error);
         alert("Something went wrong while fetching data.");
@@ -199,6 +198,7 @@ export default function Dashboard() {
   return (
     <>
       <Navbar />
+      <TawkTo />
       <div className="bg-[#b61825] pt-32 md:pt-40 px-3 md:px-6 py-10">
 
         {/* ==== Tiers Table ==== */}
@@ -406,7 +406,7 @@ export default function Dashboard() {
                     <th className="border p-2">Month</th>
                     {/* <th className="border p-2">Date</th> */}
                     <th className="border p-2">Bank Name</th>
-                    <th className="border p-2">Total Amount</th>
+                    <th className="border p-2">Profit Amount</th>
                     <th className="border p-2">Airdrop Amount</th>
                     {/* <th className="border p-2">Service</th> */}
                     <th className="border p-2">From Account</th>
@@ -415,6 +415,7 @@ export default function Dashboard() {
                     <th className="border p-2">Status</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {Array.from({ length: 12 }, (_, i) => {
                     const txn = transactions[i];
@@ -427,27 +428,40 @@ export default function Dashboard() {
                         <td className="border p-2">{txn ? txn.month : ""}</td>
                         {/* <td className="border p-2">{txn ? txn.date : ""}</td> */}
                         <td className="border p-2">{txn ? txn.bank : ""}</td>
-                        
+
+                        {/* ✅ Fixed Total Amount */}
                         <td className="border p-2">
-                          {txn
-                            ? txn.total != null
-                              ? formatCurrency(txn.total, txn.currency)
-                              : ""
-                            : ""}
+                          {txn && txn.total != null ? (
+                            <span
+                              className={`whitespace-nowrap font-semibold ${
+                                txn.total > 0 ? "text-green-600" : "text-red-600"
+                              }`}
+                            >
+                              {txn.total > 0
+                                ? `+ ${formatCurrency(txn.profit_amount, txn.currency)}`
+                                : formatCurrency(txn.profit_amount, txn.currency)}
+                            </span>
+                          ) : (
+                            ""
+                          )}
                         </td>
 
-
+                        {/* ✅ Fixed Airdrop Amount */}
                         <td className="border p-2">
-                          {txn
-                            ? txn.airdrop_amount != null
-                              ? formatCurrency(txn.airdrop_amount, txn.currency)
-                              : ""
-                            : ""}
+                          {txn && txn.airdrop_amount != null ? (
+                            <span
+                              className={`whitespace-nowrap font-semibold ${
+                                txn.airdrop_amount > 0 ? "text-green-600" : "text-red-600"
+                              }`}
+                            >
+                              {txn.airdrop_amount > 0
+                                ? `+ ${formatCurrency(txn.airdrop_amount, txn.currency)}`
+                                : formatCurrency(txn.airdrop_amount, txn.currency)}
+                            </span>
+                          ) : (
+                            ""
+                          )}
                         </td>
-
-                        {/* <td className="border p-2 whitespace-nowrap w-40">
-                          {txn ? txn.service || "" : ""}
-                        </td> */}
 
                         <td className="border p-2">
                           {txn && txn.status ? txn.from_account || " " : ""}
@@ -455,6 +469,8 @@ export default function Dashboard() {
 
                         <td className="border p-2">{txn ? txn.to_account : ""}</td>
                         <td className="border p-2">{txn ? txn.confirmation_number : ""}</td>
+
+                        {/* ✅ Status */}
                         <td
                           className={`border p-2 font-bold ${
                             txn
