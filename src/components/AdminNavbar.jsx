@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Link, useNavigate } from "react-router-dom";
 import CreateNotification from "./CreateNotification";
 import NotificationBell from "./NotificationBell";
-import { Settings2 } from 'lucide-react';
+import { Settings2 , CreditCard } from 'lucide-react';
 import ChangePassword from "./ChangePassword";
 
 export default function AdminNavbar() {
@@ -58,6 +58,13 @@ export default function AdminNavbar() {
             className="w-6 h-6 text-gray-800 cursor-pointer"
             onClick={() => navigate("/settings")}
           />
+
+          <CreditCard 
+            className="w-6 h-6 text-gray-800 cursor-pointer"
+            onClick={() => navigate("/payment_approve")}
+          
+          />
+
 
            {/* Profile Icon */}
             <div className="relative" ref={profileRef}>

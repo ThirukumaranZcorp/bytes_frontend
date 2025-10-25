@@ -21,6 +21,11 @@ export default function AdminDashboard() {
   const togglePopup3 = () => setIsPopupOpen3(!isPopupOpen3);
   const [currency, setCurrency] = useState("PHP");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 12;
+
+
+
   // Fetch users
   const fetchData = async () => {
     try {
@@ -175,7 +180,9 @@ export default function AdminDashboard() {
               </thead>
               <tbody>
                 {userDetails.length > 0 ? (
-                  userDetails.map((user) => (
+                  userDetails
+                    .slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+                    .map((user) => (
                     <React.Fragment key={user.id}>
                       <tr
                         className="text-center cursor-pointer hover:bg-gray-50"
@@ -410,6 +417,26 @@ export default function AdminDashboard() {
                 )}
               </tbody>
             </table>
+            <div className="flex justify-center items-center gap-4 mt-4">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+              className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+            >
+              Prev
+            </button>
+            <span className="font-semibold">
+              Page {currentPage} of {Math.ceil(userDetails.length / rowsPerPage)}
+            </span>
+            <button
+              disabled={currentPage === Math.ceil(userDetails.length / rowsPerPage)}
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+              className={`px-3 py-1 rounded ${currentPage === Math.ceil(userDetails.length / rowsPerPage) ? 'bg-gray-300' : 'bg-blue-500 text-white'}`}
+            >
+              Next
+            </button>
+          </div>
+
           </div>
 
             

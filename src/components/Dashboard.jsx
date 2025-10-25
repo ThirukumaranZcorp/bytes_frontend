@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import Api from "../api/ApiIP";
 import CryptoChart from "./CryptoChart";
 import TawkTo from "./TawkTo";
+import AddContributionModal from "./AddContributionModal";
 
 const tiers = [
   { name: "Starter", min: 1000, max: 2500, risk: "High", color: "#E63946" },
@@ -48,6 +49,8 @@ export default function Dashboard() {
 
   const [selected, setSelected] = useState("BTCUSDT");
   const coins = ["BTCUSDT", "ETHUSDT", "XRPUSDT", "SOLUSDT", "BNBUSDT"];
+
+  const [showModal, setShowModal] = useState(false);
 
   // Configurable penalty rate (Excel uses 1% per extra account)
   const penaltyRate = 1.0; // <-- adjust if needed later
@@ -279,17 +282,20 @@ export default function Dashboard() {
             </select>
 
 
-            <label className="block font-semibold">Capital Amount</label>
-            {/* <input
-              type="number"
-              placeholder="ENTER VALUE HERE"
-              className="w-full border rounded-lg p-2 mb-3 border-red-500 placeholder:font-bold"
-              value={capital}
-              onChange={(e) => setCapital(parseFloat(e.target.value))}
-              style={{
-                animation: "breathePlaceholder 1.5s ease-in-out infinite",
-              }}
-            /> */}
+            <div className="flex justify-between items-center mb-2">
+              <label className="font-semibold">Capital Amount</label>
+              <button
+                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+                onClick={() => setShowModal(true)}
+              >
+                Add Contribution
+              </button>
+
+              {showModal && (
+                <AddContributionModal onClose={() => setShowModal(false)} />
+              )}
+          </div>
+
 
 
             <input

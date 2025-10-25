@@ -12,6 +12,8 @@ import CreateNotification from "./components/CreateNotification";
 
 import AdminSettings from "./components/AdminSettings";
 
+import AdminContributions from "./components/AdminContributions";
+
 
 function App() {
   const token = sessionStorage.getItem("authToken");
@@ -81,6 +83,19 @@ function App() {
             </PrivateRoute>
           }
         />
+
+
+        <Route
+          path="/payment_approve"
+          element={
+            <PrivateRoute role="admin">
+              <AdminContributions />
+            </PrivateRoute>
+          }
+        />
+
+
+
 
 
         <Route
