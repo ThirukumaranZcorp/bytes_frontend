@@ -266,6 +266,7 @@ const AdminContributions = () => {
                 <th className="p-2">Current Contribution</th>
                 <th className="p-2">User ID</th>
                 <th className="p-2">Amount</th>
+                <th className="p-2">Deposit Type</th>
                 <th className="p-2">Currency</th>
                 <th className="p-2">Receipt</th>
                 <th className="p-2">Status</th>
@@ -280,6 +281,7 @@ const AdminContributions = () => {
                   <td className="p-2 text-center">{c.current_contribt}</td>
                   <td className="p-2 text-center">{c.user_id}</td>
                   <td className="p-2 text-center">{c.amount}</td>
+                  <td className="p-2 text-center">{c.deposit_type}</td>
                   <td className="p-2 text-center">{c.currency}</td>
                   <td className="p-2 text-center">
                     {c.receipt_url ? (
