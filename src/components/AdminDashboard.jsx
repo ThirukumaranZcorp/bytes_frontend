@@ -145,7 +145,7 @@ export default function AdminDashboard() {
   }, [isPopupOpen2]);
 
 
-  function formatCurrency(value) {
+  function formatCurrency(value,currency) {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: currency,
@@ -350,8 +350,8 @@ export default function AdminDashboard() {
                                                 }`}
                                               >
                                                 {txn.total > 0
-                                                  ? `+ ${formatCurrency(txn.profit_amount, user.currency)}`
-                                                  : formatCurrency(txn.profit_amount, user.currency)}
+                                                  ? `+ ${formatCurrency(txn.profit_amount, txn.currency)}`
+                                                  : formatCurrency(txn.profit_amount, txn.currency)}
                                               </span>
                                             ) : (
                                               ""
@@ -367,8 +367,8 @@ export default function AdminDashboard() {
                                                 }`}
                                               >
                                                 {txn.airdrop_amount > 0
-                                                  ? `+ ${formatCurrency(txn.airdrop_amount, user.currency)}`
-                                                  : formatCurrency(txn.airdrop_amount, user.currency)}
+                                                  ? `+ ${formatCurrency(txn.airdrop_amount, txn.currency)}`
+                                                  : formatCurrency(txn.airdrop_amount, txn.currency)}
                                               </span>
                                             ) : (
                                               ""
