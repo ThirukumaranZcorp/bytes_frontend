@@ -423,8 +423,7 @@ export default function Dashboard() {
                 </thead>
 
                 <tbody>
-                  {Array.from({ length: 12 }, (_, i) => {
-                    const txn = transactions[i];
+                  {transactions.map((txn, i) => {
                     return (
                       <tr key={i} className="text-center">
                         {/* Always show S.No */}
